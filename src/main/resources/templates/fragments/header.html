@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
+    <div th:fragment="headerFragment">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-logo">
+                    <img src="/image/logo.png" alt="logo" class="navbar-image"/>
+                </a>
+                <div class="navbar-links">
+                    <ul>
+                        <li sec:authorize="!isAuthenticated()">
+                            <a href="/oauth2/authorization/google" class="navbar-item">구글 로그인</a>
+                        </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <button onclick="confirmLogout()" class="navbar-item">로그아웃</button>
+                        </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/upload_item}" class="navbar-item">판매하기</a>
+                            <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/user/info}" class="navbar-item">내정보</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</html>
