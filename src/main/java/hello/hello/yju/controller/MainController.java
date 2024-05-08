@@ -32,16 +32,4 @@ public class MainController {
         return "index";
     }
 
-
-    @GetMapping("/user/info")
-    public String myInfo(){
-        return "myinfo";
-    }
-
-
-    @GetMapping("/admin")
-    public String admin(){
-        return "admin";
-    }
-
 }

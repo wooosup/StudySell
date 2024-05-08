@@ -24,8 +24,7 @@ public class UserEntity extends BaseEntity{
 
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ItemEntity> items = new ArrayList<>();
-
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<ItemEntity> items = new ArrayList<>();
 
 }

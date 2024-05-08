@@ -96,14 +96,8 @@
             </div>
             <div class="text-center mt-4">
                 <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/item/new}" type="submit" class="btn btn-primary">업로드</button>
-                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{'/item/new' + ${itemFormDto.id}}" type="submit" class="btn btn-primary">수정</button>
+
             </div>
-<!--            <div th:if="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">-->
-<!--                <button th:formaction="@{/upload_item}" type="submit" class="btn btn-primary">업로드</button>-->
-<!--            </div>-->
-<!--            <div th:unless="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">-->
-<!--                <button th:formaction="@{'/upload_item' + ${itemFormDto.id}}" type="submit" class="btn btn-primary">수정</button>-->
-<!--            </div>-->
     </div>
     </form>
 </div>

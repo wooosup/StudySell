@@ -2,6 +2,7 @@ package hello.hello.yju.controller;
 
 import hello.hello.yju.dto.ItemFormDto;
 import hello.hello.yju.service.ItemService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

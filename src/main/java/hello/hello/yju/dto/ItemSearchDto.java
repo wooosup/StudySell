@@ -10,6 +10,10 @@ public class ItemSearchDto {
 
     private String searchDateType;
 
+    private String searchDepartment;
+
+    private Long searchUserId;
+
     private ItemSellStatus searchSellStatus;
 
     private String searchBy;

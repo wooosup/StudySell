@@ -3,9 +3,31 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<th:block layout:fragment="css">
+   <style>
 
+   </style>
+</th:block>
 <div layout:fragment="content">
-   이름 : <p th:text="${#authentication.name}"></p>
+   <div class="container">
+      <p>이름 : <span th:text="${#authentication.name}"></span></p>
+      <h2>내 상품 목록</h2>
+      <div class="row">
+         <!-- 아이템 목록을 반복해서 보여줌 -->
+         <div th:each="item : ${items}" class="col-md-4 mt-3">
+            <div class="card">
+               <!-- 아이템 정보 -->
+               <div class="card-body">
+                  <h5 class="card-title" th:text="${item.itemName}">Item Name</h5>
+                  <p class="card-text" th:text="${item.description}">Description</p>
+                  <p class="card-text"><strong>Price:</strong> <span th:text="${item.price}">가격</span>
+                  </p>
+                  <a href="#" class="btn btn-primary">수정</a>
+                  <a href="#" class="btn btn-success">삭제</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>
-
 </html>

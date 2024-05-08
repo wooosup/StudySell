@@ -70,6 +70,17 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         QItemEntity itemEntity = QItemEntity.itemEntity;
         QItemImg itemImg = QItemImg.itemImg;
 
+        // 학과에 따른 검색 조건 추가
+        BooleanExpression departmentExpr = null;
+        if (itemSearchDto.getSearchDepartment() != null && !itemSearchDto.getSearchDepartment().isEmpty()) {
+            departmentExpr = itemEntity.department.eq(itemSearchDto.getSearchDepartment());
+        }
+        BooleanExpression userExpr = null;
+        if (itemSearchDto.getSearchUserId() != null) {
+            userExpr = itemEntity.user.id.eq(itemSearchDto.getSearchUserId());
+        }
+
+
         List<MainItemDto> content = queryFactory
                 .select(
                         new QMainItemDto(
@@ -84,6 +95,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .join(itemImg.item, itemEntity)
                 .where(itemImg.repimgYn.eq("Y"))
                 .where(itemNameLike(itemSearchDto.getSearchQuery()))
+                .where(departmentExpr)
+                .where(userExpr)
                 .orderBy(itemEntity.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -95,6 +108,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .join(itemImg.item, itemEntity)
                 .where(itemImg.repimgYn.eq("Y"))
                 .where(itemNameLike(itemSearchDto.getSearchQuery()))
+                .where(departmentExpr)
                 .fetchOne()
                 ;
 

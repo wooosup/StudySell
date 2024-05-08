@@ -6,6 +6,7 @@ import hello.hello.yju.dto.ItemSearchDto;
 import hello.hello.yju.dto.MainItemDto;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemImg;
+import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.ItemImgRepository;
 import hello.hello.yju.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static hello.hello.yju.entity.QUserEntity.userEntity;
 
 
 @Service
@@ -31,18 +35,20 @@ public class ItemService {
 
     private final ItemImgRepository itemImgRepository;
 
-    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
+    private UserEntity userEntity;
+
+    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
 
         //상품 등록
         ItemEntity itemEntity = itemFormDto.createItem();
         itemRepository.save(itemEntity);
 
         //이미지 등록
-        for(int i=0;i<itemImgFileList.size();i++){
+        for (int i = 0; i < itemImgFileList.size(); i++) {
             ItemImg itemImg = new ItemImg();
             itemImg.setItem(itemEntity);
 
-            if(i == 0)
+            if (i == 0)
                 itemImg.setRepimgYn("Y");
             else
                 itemImg.setRepimgYn("N");

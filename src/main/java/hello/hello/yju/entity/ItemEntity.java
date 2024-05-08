@@ -29,6 +29,7 @@ public class ItemEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     public void updateItem(ItemFormDto itemFormDto){
         this.department = itemFormDto.getDepartment();
         this.itemName = itemFormDto.getItemName();

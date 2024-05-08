@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
@@ -20,6 +22,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public CustomOAuth2UserService(UserRepository userRepository) {
 
         this.userRepository = userRepository;
+    }
+
+    public Optional<UserEntity> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
 
