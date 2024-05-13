@@ -91,6 +91,20 @@ public class ItemService {
         return itemEntity.getId();
     }
 
+    public void deleteItem(Long itemId) {
+        // 해당 상품의 모든 이미지 조회
+        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+
+        // 조회된 이미지들을 모두 삭제
+        if (!itemImgList.isEmpty()) {
+            for (ItemImg itemImg : itemImgList) {
+                itemImgRepository.delete(itemImg);
+            }
+        }
+        // 상품 삭제
+        itemRepository.deleteById(itemId);
+    }
+
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);

@@ -39,8 +39,9 @@
 </th:block>
 <div layout:fragment="content">
 
-    <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}" class="container mt-5">
-        <input type="hidden" th:field="*{id}">
+    <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}" th:action="${#strings.isEmpty(itemFormDto.id) ? '@{/item/new}' : '@{/item/{id}(id=${itemFormDto.id})}'}" class="container mt-5">
+
+    <input type="hidden" th:field="*{id}">
         <div class="upload-form shadow p-3 mb-5 bg-white rounded">
          <h2 class="text-center mb-4">상품 업로드</h2>
             <div class="input-group">
@@ -95,8 +96,8 @@
                 </div>
             </div>
             <div class="text-center mt-4">
-                <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/item/new}" type="submit" class="btn btn-primary">업로드</button>
-
+                <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/new}" type="submit" class="btn btn-primary">업로드</button>
+                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/{id}(id=${itemFormDto.id})}" type="submit" class="btn btn-primary">수정</button>
             </div>
     </div>
     </form>
