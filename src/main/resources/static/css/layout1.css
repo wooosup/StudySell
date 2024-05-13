@@ -1,0 +1,21 @@
+html {
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+}
+body {
+    min-height: 100%;
+}
+.content{
+    margin-bottom: 100px;
+    margin-top: 100px; /* 네비게이션 바 높이에 따라 조정 */
+}
+.banner {
+    width: 100vw;
+    height: auto; /* 높이를 자동으로 설정하여 이미지 비율을 유지 */
+    object-fit: contain;
+    min-height: 200px; /* 배너의 최소 높이 */
+    max-height: 500px; /* 배너의 최대 높이 */
+    min-width: 300px; /* 배너의 최소 너비 */
+    max-width: 1500px; /* 배너의 최대 너비 */
+}
