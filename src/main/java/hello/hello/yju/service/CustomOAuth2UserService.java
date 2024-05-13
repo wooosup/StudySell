@@ -24,10 +24,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<UserEntity> findUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
@@ -44,8 +40,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationException(new OAuth2Error("invalid_domain"), "유효하지 않은 이메일 도메인입니다.");
         }
 
-        String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        UserEntity existData = userRepository.findByUsername(username);
+        String googleId = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
+        UserEntity existData = userRepository.findByGoogleId(googleId);
 
         String email = oAuth2Response.getEmail();
         String role;
@@ -60,7 +56,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (existData == null) {
 
             UserEntity userEntity = new UserEntity();
-            userEntity.setUsername(username);
+            userEntity.setGoogleId(googleId);
             userEntity.setEmail(email);
             userEntity.setRole(role);
 
@@ -68,7 +64,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         else {
 
-            existData.setUsername(username);
+            existData.setGoogleId(googleId);
             existData.setEmail(oAuth2Response.getEmail());
 
             role = existData.getRole();

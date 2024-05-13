@@ -1,11 +1,16 @@
 package hello.hello.yju.controller;
 
+import hello.hello.yju.dto.CustomOAuth2User;
 import hello.hello.yju.dto.ItemFormDto;
+import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.service.CustomOAuth2UserService;
 import hello.hello.yju.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +36,8 @@ public class SellController {
 
     @PostMapping("/user/item/new")
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
-                          Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
+                          Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                          @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 
         if (bindingResult.hasErrors()) {
             return "upload_item";
@@ -42,8 +48,9 @@ public class SellController {
             return "upload_item";
         }
 
+        String googleId = customOAuth2User.getGoogleId();
         try {
-            itemService.saveItem(itemFormDto, itemImgFileList);
+            itemService.saveItem(itemFormDto, itemImgFileList, googleId);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
             return "upload_item";
@@ -51,6 +58,8 @@ public class SellController {
 
         return "redirect:/";
     }
+
+
 
     @GetMapping(value = "/user/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){

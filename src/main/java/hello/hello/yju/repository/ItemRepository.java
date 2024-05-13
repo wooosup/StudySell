@@ -13,7 +13,7 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long>,
 
         List<ItemEntity> findByItemName(String itemName);
 
-        List<ItemEntity> findByUser_Id(Long userId);
+        List<ItemEntity> findByUser_GoogleId(String googleId);
 
         List<ItemEntity> findByItemNameOrDescription(String itemName, String description);
 
