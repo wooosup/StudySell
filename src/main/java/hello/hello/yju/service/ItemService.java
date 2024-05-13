@@ -9,6 +9,7 @@ import hello.hello.yju.entity.ItemImg;
 import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.ItemImgRepository;
 import hello.hello.yju.repository.ItemRepository;
+import hello.hello.yju.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static hello.hello.yju.entity.QUserEntity.userEntity;
 
 
 @Service
@@ -35,12 +33,20 @@ public class ItemService {
 
     private final ItemImgRepository itemImgRepository;
 
-    private UserEntity userEntity;
+    private final UserRepository userRepository;
 
-    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+    public UserEntity getCurrentUserEntityByGoogleId(String googleId) {
+        return userRepository.findByGoogleId(googleId);
+    }
+
+    @Transactional
+    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList, String googleId) throws Exception {
+
+        UserEntity userEntity = getCurrentUserEntityByGoogleId(googleId);
 
         //상품 등록
         ItemEntity itemEntity = itemFormDto.createItem();
+        itemEntity.setUser(userEntity);
         itemRepository.save(itemEntity);
 
         //이미지 등록

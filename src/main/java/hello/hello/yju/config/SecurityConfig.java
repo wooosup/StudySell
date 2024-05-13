@@ -1,7 +1,6 @@
 package hello.hello.yju.config;
 
 import hello.hello.yju.service.CustomOAuth2UserService;
-import jakarta.servlet.http.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,8 +45,8 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)));
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/**", "/oauth2/**", "/login/**","/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/myinfo/**","/item/**","/user/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/**", "/oauth2/**", "/login/**","/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http

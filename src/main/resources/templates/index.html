@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:C="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
 <th:block layout:fragment="css">
@@ -72,7 +72,7 @@
 
     <div class="row justify-content-center">
         <th:block th:each="item, status : ${items.getContent()}">
-            <div class="col-lg-3 col-md-4 col-sm-6 margin">
+            <div class="col-lg-4 col-md-4 col-sm-6 margin">
                 <div class="card custom-card">
                     <a th:href="'/item/' +${item.id}" class="text-dark">
                       <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemName}" height="400">
@@ -90,13 +90,13 @@
                 <ul class="pagination justify-content-center">
 
                     <li class="page-item" th:classappend="${items.number == 0}?'disabled':''">
-                        <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + (items.number-1)}" aria-label='Previous' class="page-link">
+                        <a th:href="@{'/'(searchQuery=${itemSearchDto.searchQuery}, page=${items.number - 1})}" aria-label='Previous' class="page-link">
                             <span aria-hidden='true'>이전</span>
                         </a>
                     </li>
 
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number == (page - 1) ? 'active' : ''}">
-                        <a th:href="@{'/' +'?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + (page-1)}" th:inline="text" class="page-link">[[${page}]]</a>
+                        <a th:href="@{'/'(searchQuery=${itemSearchDto.searchQuery}, page=${page - 1})}"  th:inline="text" class="page-link">[[${page}]]</a>
                     </li>
 
                     <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">

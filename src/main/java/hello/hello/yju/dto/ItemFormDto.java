@@ -22,7 +22,7 @@ public class ItemFormDto {
 
     private Integer price;
 
-    private Long user_id;
+    private String googleId;
 
     private ItemSellStatus itemSellStatus;
 

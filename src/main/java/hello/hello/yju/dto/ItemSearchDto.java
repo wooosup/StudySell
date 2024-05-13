@@ -12,7 +12,7 @@ public class ItemSearchDto {
 
     private String searchDepartment;
 
-    private Long searchUserId;
+    private String searchUserId;
 
     private ItemSellStatus searchSellStatus;
 

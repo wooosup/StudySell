@@ -77,7 +77,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         }
         BooleanExpression userExpr = null;
         if (itemSearchDto.getSearchUserId() != null) {
-            userExpr = itemEntity.user.id.eq(itemSearchDto.getSearchUserId());
+            userExpr = itemEntity.user.googleId.eq(itemSearchDto.getSearchUserId());
         }
 
 
@@ -109,8 +109,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .where(itemImg.repimgYn.eq("Y"))
                 .where(itemNameLike(itemSearchDto.getSearchQuery()))
                 .where(departmentExpr)
-                .fetchOne()
-                ;
+                .fetchOne();
 
         return new PageImpl<>(content, pageable, total);
     }

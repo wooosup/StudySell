@@ -10,10 +10,9 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long>,
     QuerydslPredicateExecutor<ItemEntity>, ItemRepositoryCustom {
-
         List<ItemEntity> findByItemName(String itemName);
 
-        List<ItemEntity> findByUser_Id(Long userId);
+        List<ItemEntity> findByUser_GoogleId(String googleId);
 
         List<ItemEntity> findByItemNameOrDescription(String itemName, String description);
 
