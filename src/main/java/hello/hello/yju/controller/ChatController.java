@@ -1,86 +1,67 @@
 package hello.hello.yju.controller;
 
-import hello.hello.yju.dto.Room;
+import hello.hello.yju.entity.ChatMessage;
+import hello.hello.yju.entity.ChatRoom;
+import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.repository.UserRepository;
+import hello.hello.yju.service.ChatMessageService;
+import hello.hello.yju.service.ChatRoomService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class ChatController {
 
-    List<Room> roomList = new ArrayList<Room>();
-    static int roomNumber = 0;
+    private final ChatRoomService chatRoomService;
+    private final ChatMessageService chatMessageService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    @RequestMapping("/item/chat")
-    public ModelAndView chat() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("chat");
-        return mv;
+    @Autowired
+    public ChatController(ChatRoomService chatRoomService, ChatMessageService chatMessageService, SimpMessagingTemplate messagingTemplate) {
+        this.chatRoomService = chatRoomService;
+        this.chatMessageService = chatMessageService;
+        this.messagingTemplate = messagingTemplate;
     }
 
-    /**
-     * 방 페이지
-     * @return
-     */
-    @RequestMapping("/room")
-    public ModelAndView room() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("room");
-        return mv;
+    @GetMapping("/item/room/{room_Id}")
+    public String chatRoom(@PathVariable Long roomId, Model model) {
+        ChatRoom room = chatRoomService.findById(roomId);
+        List<ChatMessage> messages = chatMessageService.findAllMessages(roomId);
+        model.addAttribute("room", room);
+        model.addAttribute("messages", messages);
+        return "room";
     }
 
-    /**
-     * 방 생성하기
-     * @param params
-     * @return
-     */
-    @RequestMapping("/createRoom")
-    public @ResponseBody List<Room> createRoom(@RequestParam HashMap<Object, Object> params){
-        String roomName = (String) params.get("roomName");
-        if(roomName != null && !roomName.trim().equals("")) {
-            Room room = new Room();
-            room.setRoomNumber(++roomNumber);
-            room.setRoomName(roomName);
-            roomList.add(room);
+    @GetMapping("/item/room/create")
+    public String createRoom(@RequestParam String seller, @RequestParam String buyer, @RequestParam Long itemId) {
+        chatRoomService.createRoom(seller, buyer, itemId);
+        return "redirect:/";
+    }
+
+    @PostMapping("/item/room/{roomId}/leave")
+    public String leaveRoom(@PathVariable Long roomId, Principal principal) {
+        String username = principal.getName();
+        ChatRoom room = chatRoomService.findById(roomId);
+
+        if (room.getSeller().getName().equals(username) || room.getBuyer().getName().equals(username)) {
+            chatRoomService.deleteRoom(roomId);
         }
-        return roomList;
+
+        return "redirect:/";
     }
 
-    /**
-     * 방 정보가져오기
-     * @param params
-     * @return
-     */
-    @RequestMapping("/getRoom")
-    public @ResponseBody List<Room> getRoom(@RequestParam HashMap<Object, Object> params){
-        return roomList;
-    }
-
-    /**
-     * 채팅방
-     * @return
-     */
-    @RequestMapping("/moveChating")
-    public ModelAndView chating(@RequestParam HashMap<Object, Object> params) {
-        ModelAndView mv = new ModelAndView();
-        int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
-
-        List<Room> new_list = roomList.stream().filter(o->o.getRoomNumber()==roomNumber).collect(Collectors.toList());
-        if(new_list != null && new_list.size() > 0) {
-            mv.addObject("roomName", params.get("roomName"));
-            mv.addObject("roomNumber", params.get("roomNumber"));
-            mv.setViewName("chat");
-        }else {
-            mv.setViewName("room");
-        }
-        return mv;
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(ChatMessage message) {
+        chatMessageService.saveMessage(message);
+        messagingTemplate.convertAndSend("/topic/" + message.getChatRoom().getId(), message);
     }
 }

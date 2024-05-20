@@ -52,7 +52,7 @@
 <div layout:fragment="content">
    <form role="form" method="post" enctype="multipart/form-data" th:object="${items}" class="container mt-5">
       <p>이름 : <span th:text="${#authentication.name}"></span></p>
-      <h2>내 상품 목록</h2>
+      <a th:href="@{myinfo/items}">내 상품 목록</a>
       <div class="row">
          <!-- 아이템 목록을 반복해서 보여줌 -->
          <div th:each="item : ${items}" class="col-md-4 mt-3">
@@ -70,6 +70,15 @@
             </div>
          </div>
       </div>
+      <a th:href="@{myinfo/rooms}">My Chat Rooms</a>
+      <ul>
+         <li th:each="room : ${rooms}">
+            <a th:href="@{/item/room/{id}(id=${room.id})}" th:text="${room.name}"></a>
+            <form th:action="@{/item/room/{id}/leave(id=${room.id})}" method="post" style="display:inline;">
+               <button type="submit">Leave</button>
+            </form>
+         </li>
+      </ul>
    </form>
 </div>
 </html>

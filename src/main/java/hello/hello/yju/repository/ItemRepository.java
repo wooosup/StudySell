@@ -7,10 +7,13 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long>,
     QuerydslPredicateExecutor<ItemEntity>, ItemRepositoryCustom {
         List<ItemEntity> findByItemName(String itemName);
+
+        Optional<ItemEntity> findById(Long itemId);
 
         List<ItemEntity> findByUser_GoogleId(String googleId);
 

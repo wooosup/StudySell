@@ -26,4 +26,9 @@ public class UserEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ItemEntity> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "seller")
+    private List<ChatRoom> seller;
+
+    @OneToMany(mappedBy = "buyer")
+    private List<ChatRoom> buyer;
 }
