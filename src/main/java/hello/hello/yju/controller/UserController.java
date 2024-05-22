@@ -7,8 +7,6 @@ import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.UserRepository;
-import hello.hello.yju.service.ChatRoomService;
-import hello.hello.yju.service.ItemService;
 import hello.hello.yju.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,7 +24,6 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private final ChatRoomService chatRoomService;
 
     @GetMapping("/myinfo")
     public String myInfo() {
@@ -46,13 +43,13 @@ public class UserController {
         // Thymeleaf 템플릿 반환
         return "myinfo";
     }
-    @GetMapping("/myinfo/rooms")
-    public String chatRooms(Model model, Principal principal) {
-        String username = principal.getName();
-        UserEntity user = userRepository.findByName(username).orElseThrow(() -> new RuntimeException("User not found"));
-        List<ChatRoom> rooms = chatRoomService.findBySellerOrBuyer(user);
-        model.addAttribute("rooms", rooms);
-        return "myinfo";
-    }
+//    @GetMapping("/myinfo/rooms")
+//    public String chatRooms(Model model, Principal principal) {
+//        String username = principal.getName();
+//        UserEntity user = userRepository.findByName(username).orElseThrow(() -> new RuntimeException("User not found"));
+//        List<ChatRoom> rooms = chatRoomService.findBySellerOrBuyer(user);
+//        model.addAttribute("rooms", rooms);
+//        return "myinfo";
+//    }
 
 }

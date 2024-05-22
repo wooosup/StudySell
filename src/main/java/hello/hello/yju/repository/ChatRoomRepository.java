@@ -7,8 +7,11 @@ import hello.hello.yju.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    List<ChatRoom> findBySellerOrBuyer(UserEntity seller, UserEntity buyer);
-    List<ChatRoom> findByItem(ItemEntity item);
+
+    Optional<ChatRoom> findById(Long chatRoomId);
+    List<ChatRoom> findByItem_Id(Long itemId);
+    Optional<ChatRoom> findBySellerAndBuyerAndItem(UserEntity seller, UserEntity buyer, ItemEntity item);
 }

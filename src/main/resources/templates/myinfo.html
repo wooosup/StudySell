@@ -71,14 +71,14 @@
          </div>
       </div>
       <a th:href="@{myinfo/rooms}">My Chat Rooms</a>
-      <ul>
-         <li th:each="room : ${rooms}">
-            <a th:href="@{/item/room/{id}(id=${room.id})}" th:text="${room.name}"></a>
-            <form th:action="@{/item/room/{id}/leave(id=${room.id})}" method="post" style="display:inline;">
-               <button type="submit">Leave</button>
-            </form>
-         </li>
-      </ul>
+<!--      <ul>-->
+<!--         <li th:each="room : ${rooms}">-->
+<!--            <a th:href="@{/item/room/{id}(id=${room.id})}" th:text="${room.name}"></a>-->
+<!--            <form th:action="@{/item/room/{id}/leave(id=${room.id})}" method="post" style="display:inline;">-->
+<!--               <button type="submit">Leave</button>-->
+<!--            </form>-->
+<!--         </li>-->
+<!--      </ul>-->
    </form>
 </div>
 </html>

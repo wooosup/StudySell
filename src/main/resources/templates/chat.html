@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<th:block layout:fragment="css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0;
+            background-color: white;
+        }
+
+        .chat-header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f1f1f1;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            margin-right: 10px;
+            border-radius: 20px;
+            padding: 10px;
+        }
+
+        .chat-footer button {
+            flex-shrink: 0;
+            border-radius: 20px;
+            padding: 10px 20px;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+        }
+
+        .chat-message .sender {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .chat-message .textbox {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.ch1 {
+            align-items: flex-start;
+        }
+
+        .chat-message.ch1 .textbox {
+            background-color: #e9ecef;
+        }
+
+        .chat-message.ch2 {
+            align-items: flex-end;
+        }
+
+        .chat-message.ch2 .textbox {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .chat-message .time {
+            font-size: 0.8rem;
+            color: gray;
+            margin-top: 5px;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/ws'); // 서버의 WebSocket 연결 엔드포인트
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/sub/chat/' + chatRoomId.value, function(message) {
+                    showMessage(JSON.parse(message.body));
+                });
+            });
+
+            loadPreviousMessages();
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            console.log("Disconnected");
+        }
+
+        function sendMessage() {
+            var chatRoomId = document.getElementById('chatRoomId').value;
+            var senderId = document.getElementById('senderId').value;
+            var senderName = document.getElementById('senderName').value;
+            var message = document.getElementById('messageInput').value;
+
+            stompClient.send("/app/chat/send/" + chatRoomId, {}, JSON.stringify({
+                message: message,
+                senderId: senderId,
+                senderName: senderName
+            }));
+            document.getElementById('messageInput').value = ""; // 입력 필드 초기화
+        }
+
+        function loadPreviousMessages() {
+            var chatRoomId = document.getElementById('chatRoomId').value;
+            $.get("/chat/messages/" + chatRoomId, function(data) {
+                if (data) {
+                    loadChat(data);
+                }
+            });
+        }
+
+        function loadChat(chatList) {
+            if (chatList != null) {
+                for (let chat of chatList) {
+                    showMessage(chat);
+                }
+            }
+        }
+
+        function showMessage(message) {
+            var chatBox = document.getElementById('chatBox');
+            if (!chatBox) {
+                console.error('Chat box element is not found.');
+                return;
+            }
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+            if (message.senderId === document.getElementById('senderId').value) {
+                messageElement.classList.add('ch2');
+            } else {
+                messageElement.classList.add('ch1');
+            }
+
+            var timeString = new Date(message.timestamp).toLocaleTimeString();
+
+            messageElement.innerHTML = `
+                <div class="sender">${message.senderName}</div>
+                <div class="textbox">${message.message}</div>
+                <div class="time">${timeString}</div>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        $(document).ready(function () {
+            connect();
+
+            $("#chat-footer").on('submit', function (e) {
+                e.preventDefault();
+            });
+
+            // 버튼 클릭 이벤트에 함수 할당
+            $("#send").click(function () {
+                sendMessage();
+            });
+
+            // 엔터키를 누르면 메시지를 보냄
+            $("#messageInput").keydown(function (e) {
+                if (e.key === "Enter") {
+                    sendMessage();
+                    e.preventDefault(); // Enter 키로 인한 폼 제출을 방지
+                }
+            });
+
+            // 창을 닫을 때 연결 종료
+            window.onbeforeunload = function () {
+                disconnect();
+            };
+        });
+    </script>
+</th:block>
+
+<body>
+<div layout:fragment="content" class="container mt-5">
+    <!-- Hidden inputs to store Thymeleaf variables -->
+    <input type="hidden" id="chatRoomId" th:value="${chatRoomId}">
+    <input type="hidden" id="senderId" th:value="${senderId}">
+    <input type="hidden" id="senderName" th:value="${senderName}">
+
+    <div class="chat-container shadow">
+        <div class="chat-header">
+            채팅방
+        </div>
+        <div id="chatBox" class="chat-messages">
+            <!-- Messages will be added here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="messageInput" class="form-control" placeholder="Enter your message">
+            <button id="send" type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

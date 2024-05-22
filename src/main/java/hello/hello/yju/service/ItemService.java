@@ -4,9 +4,11 @@ import hello.hello.yju.dto.ItemFormDto;
 import hello.hello.yju.dto.ItemImgDto;
 import hello.hello.yju.dto.ItemSearchDto;
 import hello.hello.yju.dto.MainItemDto;
+import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemImg;
 import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.repository.ChatRoomRepository;
 import hello.hello.yju.repository.ItemImgRepository;
 import hello.hello.yju.repository.ItemRepository;
 import hello.hello.yju.repository.UserRepository;
@@ -34,6 +36,9 @@ public class ItemService {
     private final ItemImgRepository itemImgRepository;
 
     private final UserRepository userRepository;
+
+    private final ChatService chatService;
+
 
     public UserEntity getCurrentUserEntityByGoogleId(String googleId) {
         return userRepository.findByGoogleId(googleId);
@@ -107,8 +112,13 @@ public class ItemService {
                 itemImgRepository.delete(itemImg);
             }
         }
+
+        // 채팅방과 메시지 삭제
+        chatService.deleteChatRoomsByItemId(itemId);
+
         // 상품 삭제
         itemRepository.deleteById(itemId);
+
     }
 
     @Transactional(readOnly = true)

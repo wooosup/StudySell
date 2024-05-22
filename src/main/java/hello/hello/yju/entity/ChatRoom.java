@@ -7,22 +7,15 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "chat_room")
-public class ChatRoom extends BaseEntity {
+public class ChatRoom {
 
     @Id
-    @Column(name = "room_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private ItemEntity item;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
@@ -31,5 +24,9 @@ public class ChatRoom extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private UserEntity buyer;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private ItemEntity item;
 
 }

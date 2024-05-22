@@ -1,67 +1,82 @@
 package hello.hello.yju.controller;
 
+import hello.hello.yju.dto.ChatMessageDto;
+import hello.hello.yju.dto.ChatRoomDto;
+import hello.hello.yju.dto.CustomOAuth2User;
+import hello.hello.yju.dto.ItemFormDto;
 import hello.hello.yju.entity.ChatMessage;
-import hello.hello.yju.entity.ChatRoom;
-import hello.hello.yju.entity.UserEntity;
-import hello.hello.yju.repository.UserRepository;
+import hello.hello.yju.entity.ItemEntity;
+import hello.hello.yju.repository.ItemRepository;
 import hello.hello.yju.service.ChatMessageService;
-import hello.hello.yju.service.ChatRoomService;
-import org.springframework.beans.factory.annotation.Autowired;
+import hello.hello.yju.service.ChatService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class ChatController {
 
-    private final ChatRoomService chatRoomService;
+    private final ChatService chatService;
+    private final ItemRepository itemRepository;
+
     private final ChatMessageService chatMessageService;
-    private final SimpMessagingTemplate messagingTemplate;
 
-    @Autowired
-    public ChatController(ChatRoomService chatRoomService, ChatMessageService chatMessageService, SimpMessagingTemplate messagingTemplate) {
-        this.chatRoomService = chatRoomService;
-        this.chatMessageService = chatMessageService;
-        this.messagingTemplate = messagingTemplate;
+    @GetMapping("/chat/{itemId}")
+    public String chatRoom(@PathVariable Long itemId, Authentication authentication, Model model) {
+        CustomOAuth2User buyerGoogleId = (CustomOAuth2User) authentication.getPrincipal();
+        String buyerId = buyerGoogleId.getGoogleId();
+
+        String buyerName = buyerGoogleId.getName();
+
+        ItemEntity item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item ID"));
+        String sellerId = item.getUser().getGoogleId();
+
+        ChatRoomDto chatRoomDto = chatService.createChatRoom(sellerId, buyerId, itemId);
+        model.addAttribute("chatRoomId", chatRoomDto.getId());
+        model.addAttribute("senderId", buyerId);
+        model.addAttribute("senderName", buyerName);
+
+        return "chat"; // The chat room HTML page
     }
 
-    @GetMapping("/item/room/{room_Id}")
-    public String chatRoom(@PathVariable Long roomId, Model model) {
-        ChatRoom room = chatRoomService.findById(roomId);
-        List<ChatMessage> messages = chatMessageService.findAllMessages(roomId);
-        model.addAttribute("room", room);
-        model.addAttribute("messages", messages);
-        return "room";
+    @GetMapping("/chat/messages/{chatRoomId}")
+    @ResponseBody
+    public List<ChatMessageDto> getChatMessages(@PathVariable Long chatRoomId) {
+        return chatService.getChatMessages(chatRoomId).stream()
+                .map(chatMessage -> {
+                    ChatMessageDto dto = new ChatMessageDto();
+                    dto.setId(chatMessage.getId());
+                    dto.setChatRoomId(chatRoomId);
+                    dto.setSenderId(chatMessage.getSender().getGoogleId());
+                    dto.setSenderName(chatMessage.getSenderName().getName());
+                    dto.setMessage(chatMessage.getMessage());
+                    dto.setTimestamp(chatMessage.getTimestamp());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/item/room/create")
-    public String createRoom(@RequestParam String seller, @RequestParam String buyer, @RequestParam Long itemId) {
-        chatRoomService.createRoom(seller, buyer, itemId);
-        return "redirect:/";
+    @PostMapping("/chat/messages/send")
+    public ResponseEntity<ChatMessageDto> sendMessage(@RequestBody ChatMessageDto chatMessageDto) {
+        ChatMessageDto savedMessageDto = chatMessageService.saveMessage(chatMessageDto.getChatRoomId(), chatMessageDto.getMessage(), chatMessageDto.getSenderId(), chatMessageDto.getSenderName());
+        return ResponseEntity.ok(savedMessageDto);
     }
 
-    @PostMapping("/item/room/{roomId}/leave")
-    public String leaveRoom(@PathVariable Long roomId, Principal principal) {
-        String username = principal.getName();
-        ChatRoom room = chatRoomService.findById(roomId);
-
-        if (room.getSeller().getName().equals(username) || room.getBuyer().getName().equals(username)) {
-            chatRoomService.deleteRoom(roomId);
-        }
-
-        return "redirect:/";
-    }
-
-    @MessageMapping("/chat.sendMessage")
-    public void sendMessage(ChatMessage message) {
-        chatMessageService.saveMessage(message);
-        messagingTemplate.convertAndSend("/topic/" + message.getChatRoom().getId(), message);
+    @MessageMapping("/chat/send/{chatRoomId}")
+    @SendTo("/sub/chat/{chatRoomId}")
+    public ChatMessageDto sendMessage(@DestinationVariable Long chatRoomId, @Payload ChatMessageDto chatMessageDto) {
+        return chatMessageService.saveMessage(chatRoomId, chatMessageDto.getMessage(), chatMessageDto.getSenderId(), chatMessageDto.getSenderName());
     }
 }
