@@ -4,6 +4,8 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class MainItemDto {
@@ -20,8 +22,10 @@ public class MainItemDto {
 
     private int price;
 
+    private String relativeTime;
+
     @QueryProjection
-    public MainItemDto(Long id, String department, String itemName, String description, String imgUrl, int price )
+    public MainItemDto(Long id, String department, String itemName, String description, String imgUrl, int price, LocalDateTime regTime)
         {
             this.id = id;
             this.department = department;
@@ -29,5 +33,6 @@ public class MainItemDto {
             this.description = description;
             this.imgUrl = imgUrl;
             this.price = price;
+            this.relativeTime = TimeUtils.getRelativeTime(regTime);
         }
 }

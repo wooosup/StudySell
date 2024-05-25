@@ -2,15 +2,12 @@ package hello.hello.yju.controller;
 
 import hello.hello.yju.dto.CustomOAuth2User;
 import hello.hello.yju.dto.ItemFormDto;
-import hello.hello.yju.entity.UserEntity;
-import hello.hello.yju.service.CustomOAuth2UserService;
+import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,13 +17,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
 @Controller
 @RequiredArgsConstructor
 public class SellController {
 
     private final ItemService itemService;
-
 
     @GetMapping("/user/item/new")
     public String itemForm(Model model) {
@@ -59,11 +54,8 @@ public class SellController {
         return "redirect:/";
     }
 
-
-
     @GetMapping(value = "/user/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
-
         try {
             ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
@@ -72,7 +64,6 @@ public class SellController {
             model.addAttribute("itemFormDto", new ItemFormDto());
             return "upload_item";
         }
-
         return "upload_item";
     }
 
@@ -100,7 +91,6 @@ public class SellController {
 
     @PostMapping("/user/item/{id}/delete")
     public String deleteItem(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
-        // 메소드 내용은 동일
         try {
             itemService.deleteItem(id); // 상품 삭제 로직 수행
             redirectAttributes.addFlashAttribute("successMessage", "상품이 성공적으로 삭제되었습니다.");

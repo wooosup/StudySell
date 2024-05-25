@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-</head>
 <th:block layout:fragment="css">
     <style>
         body {
@@ -167,6 +163,7 @@
                 console.error('Chat box element is not found.');
                 return;
             }
+
             var messageElement = document.createElement('div');
             messageElement.classList.add('chat-message');
             if (message.senderId === document.getElementById('senderId').value) {
@@ -175,7 +172,7 @@
                 messageElement.classList.add('ch1');
             }
 
-            var timeString = new Date(message.timestamp).toLocaleTimeString();
+            var timeString = new Date(message.timestamp).toLocaleTimeString(); // 타임스탬프 사용
 
             messageElement.innerHTML = `
                 <div class="sender">${message.senderName}</div>

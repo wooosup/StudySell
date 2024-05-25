@@ -27,6 +27,16 @@ public class ChatRoom {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
+
     private ItemEntity item;
+    public String getOtherUserId(String googleId) {
+        if (googleId.equals(seller.getGoogleId())) {
+            return buyer.getGoogleId();
+        } else if (googleId.equals(buyer.getGoogleId())) {
+            return seller.getGoogleId();
+        } else {
+            throw new IllegalArgumentException("User is not part of this chat room");
+        }
+    }
 
 }

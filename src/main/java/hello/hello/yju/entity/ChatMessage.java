@@ -24,9 +24,7 @@ public class ChatMessage {
     @JoinColumn(name = "sender_id")
     private UserEntity sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_Name")
-    private UserEntity senderName;
+    private String senderName;
 
     private String message;
 

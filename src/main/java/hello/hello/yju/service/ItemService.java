@@ -1,9 +1,6 @@
 package hello.hello.yju.service;
 
-import hello.hello.yju.dto.ItemFormDto;
-import hello.hello.yju.dto.ItemImgDto;
-import hello.hello.yju.dto.ItemSearchDto;
-import hello.hello.yju.dto.MainItemDto;
+import hello.hello.yju.dto.*;
 import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemImg;
@@ -20,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -44,13 +44,28 @@ public class ItemService {
         return userRepository.findByGoogleId(googleId);
     }
 
+    public List<ItemFormDto> getAllItems() {
+        return itemRepository.findAll().stream()
+                .map(this::convertToDtoWithRelativeTime)
+                .collect(Collectors.toList());
+    }
+
+    private ItemFormDto convertToDtoWithRelativeTime(ItemEntity itemEntity) {
+        ItemFormDto dto = ItemFormDto.of(itemEntity);
+        dto.setRelativeTime(TimeUtils.getRelativeTime(itemEntity.getRegTime()));
+        return dto;
+    }
+
+
     @Transactional
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList, String googleId) throws Exception {
 
         UserEntity userEntity = getCurrentUserEntityByGoogleId(googleId);
 
+
         //상품 등록
         ItemEntity itemEntity = itemFormDto.createItem();
+        itemEntity.setRegTime(LocalDateTime.now());
         itemEntity.setUser(userEntity);
         itemRepository.save(itemEntity);
 

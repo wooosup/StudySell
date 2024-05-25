@@ -20,4 +20,16 @@ public class ChatMessageDto {
     private String message;
 
     private LocalDateTime timestamp;
+
+    @Override
+    public String toString() {
+        return "ChatMessageDto{" +
+                "id=" + id +
+                ", chatRoomId=" + chatRoomId +
+                ", senderId='" + senderId + '\'' +
+                ", senderName='" + senderName + '\'' +
+                ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

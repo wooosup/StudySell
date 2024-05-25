@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
 
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <script src="/js/alarm.js"></script>
+</head>
+
+<body>
 <div th:fragment="headerFragment">
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white">
         <a href="/" class="navbar-brand">
             <img src="/images/StudySell.png" alt="logo" class="navbar-image"/>
         </a>
-        <form th:action="@{/}" method="get" class="d-flex">
+        <form th:action="@{/}" method="get" class="d-flex ml-auto">
             <input name="searchQuery" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-primary" type="submit">Search</button>
         </form>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                <li class="nav-item notification" sec:authorize="isAuthenticated()">
+                    <a href="#" class="nav-link" id="notificationIcon">🔔<span id="notificationCount"></span></a>
+                </li>
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a href="/oauth2/authorization/google" class="nav-link">구글 로그인</a>
                 </li>
@@ -26,10 +37,11 @@
                     <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/user/item/new}" class="nav-link">판매하기</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/myinfo}" class="nav-link">내정보</a>
+                    <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/myInfo}" class="nav-link">내정보</a>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+</body>
 </html>

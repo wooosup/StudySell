@@ -1,8 +1,66 @@
 <!DOCTYPE html>
-<html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
-        layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 
+    <th:block layout:fragment="css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fff);
+        }
+
+        .upload-form {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            font-size: 1.2rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-back {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .fieldError {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+    </style>
+
+    </th:block>
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
@@ -34,72 +92,67 @@
     </script>
 
 </th:block>
-<th:block layout:fragment="css">
-
-</th:block>
-<div layout:fragment="content">
-
-    <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}" th:action="${#strings.isEmpty(itemFormDto.id) ? '@{/item/new}' : '@{/item/{id}(id=${itemFormDto.id})}'}" class="container mt-5">
-
-    <input type="hidden" th:field="*{id}">
-        <div class="upload-form shadow p-3 mb-5 bg-white rounded">
-         <h2 class="text-center mb-4">상품 업로드</h2>
-            <div class="input-group">
-                <select th:field="*{itemSellStatus}" class="custom-select">
-                    <option value="SELL">판매중</option>
-                    <option value="Reservation">거래대기</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <select th:field="*{department}" class="custom-select">
-                    <option value="컴퓨터과">컴퓨터과</option>
-                    <option value="간호학과">간호학과</option>
-                    <option value="기계과">기계과</option>
-                </select>
-            </div>
+<body>
+<div layout:fragment="content" class="container my-5">
+    <button class="btn btn-back" onclick="history.back()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+    <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}"
+          th:action="${#strings.isEmpty(itemFormDto.id) ? '@{/item/new}' : '@{/item/{id}(id=${itemFormDto.id})}'}" class="upload-form shadow p-3 mb-5 bg-white rounded">
+        <input type="hidden" th:field="*{id}">
+        <h2 class="text-center mb-4">상품 업로드</h2>
+        <div class="form-group">
+            <label for="itemSellStatus">판매 상태</label>
+            <select th:field="*{itemSellStatus}" class="form-control custom-select">
+                <option value="SELL">판매중</option>
+                <option value="Reservation">거래대기</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="department">학과</label>
+            <select th:field="*{department}" class="form-control custom-select">
+                <option value="컴퓨터과">컴퓨터과</option>
+                <option value="간호학과">간호학과</option>
+                <option value="기계과">기계과</option>
+            </select>
             <p th:if="${#fields.hasErrors('department')}" th:errors="*{department}" class="fieldError">Incorrect data</p>
-
-            <div class="input-group">
-                <span class="input-group-text">책 명</span>
-                <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력해주세요">
-            </div>
+        </div>
+        <div class="form-group">
+            <label for="itemName">책 명</label>
+            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력해주세요">
             <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
-
-            <div class="input-group">
-                <span class="input-group-text">책 설명</span>
-                <textarea class="form-control" aria-label="With textarea" th:field="*{description}"></textarea>
-            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">책 설명</label>
+            <textarea class="form-control" aria-label="With textarea" th:field="*{description}"></textarea>
             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="fieldError">Incorrect data</p>
-
-            <div class="input-group">
-                <span class="input-group-text">가격</span>
-                <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력해주세요">
-            </div>
-            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">Incorrect data</p>
-
-            <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
-                    <div class="custom-file img-div">
-                        <input type="file" class="custom-file-input" name="itemImgFile">
-                        <label class="custom-file-label" th:text="상품이미지 + ${num}"></label>
-                    </div>
+        </div>
+        <div class="form-group">
+            <label for="price">가격</label>
+            <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력해주세요">
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
+        </div>
+        <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+            <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="itemImgFile">
+                    <label class="custom-file-label" th:text="상품이미지 + ${num}"></label>
                 </div>
             </div>
+        </div>
 
-            <div th:if = "${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                <div class="form-group" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
-                    <div class="custom-file img-div">
-                        <input type="file" class="custom-file-input" name="itemImgFile">
-                        <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                        <label class="custom-file-label" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
-                    </div>
+        <div th:if = "${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
+            <div class="form-group" th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="itemImgFile">
+                    <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                    <label class="custom-file-label" th:text="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품이미지' + ${status.index+1}"></label>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/new}" type="submit" class="btn btn-primary">업로드</button>
-                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/{id}(id=${itemFormDto.id})}" type="submit" class="btn btn-primary">수정</button>
-            </div>
-    </div>
+        </div>
+        <div class="text-center mt-4">
+            <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/new}" type="submit" class="btn btn-primary">업로드</button>
+            <button th:unless="${#strings.isEmpty(itemFormDto.id)}" th:formaction="@{/user/item/{id}(id=${itemFormDto.id})}" type="submit" class="btn btn-primary">수정</button>
+        </div>
     </form>
 </div>
+</body>
 </html>

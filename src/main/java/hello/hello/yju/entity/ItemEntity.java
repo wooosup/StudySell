@@ -26,6 +26,9 @@ public class ItemEntity extends BaseEntity {
 
     private ItemSellStatus itemSellStatus;
 
+    @Transient
+    private String relativeTime; // 상대 시간 필드
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
