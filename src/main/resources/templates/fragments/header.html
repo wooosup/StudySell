@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 
+
+<body>
 <div th:fragment="headerFragment">
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white">
         <a href="/" class="navbar-brand">
             <img src="/images/StudySell.png" alt="logo" class="navbar-image"/>
         </a>
-        <form th:action="@{/}" method="get" class="d-flex">
+        <form th:action="@{/}" method="get" class="d-flex ml-auto">
             <input name="searchQuery" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-primary" type="submit">Search</button>
         </form>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,10 +27,11 @@
                     <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/user/item/new}" class="nav-link">판매하기</a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/myinfo}" class="nav-link">내정보</a>
+                    <a sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')" th:href="@{/myInfo}" class="nav-link">내정보</a>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+</body>
 </html>

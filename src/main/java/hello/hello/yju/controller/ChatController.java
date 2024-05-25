@@ -3,8 +3,7 @@ package hello.hello.yju.controller;
 import hello.hello.yju.dto.ChatMessageDto;
 import hello.hello.yju.dto.ChatRoomDto;
 import hello.hello.yju.dto.CustomOAuth2User;
-import hello.hello.yju.dto.ItemFormDto;
-import hello.hello.yju.entity.ChatMessage;
+import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.repository.ItemRepository;
 import hello.hello.yju.service.ChatMessageService;
@@ -29,14 +28,12 @@ public class ChatController {
 
     private final ChatService chatService;
     private final ItemRepository itemRepository;
-
     private final ChatMessageService chatMessageService;
 
-    @GetMapping("/chat/{itemId}")
-    public String chatRoom(@PathVariable Long itemId, Authentication authentication, Model model) {
+    @PostMapping("/chat/create/{itemId}")
+    public String createChatRoom(@PathVariable Long itemId, Authentication authentication, Model model) {
         CustomOAuth2User buyerGoogleId = (CustomOAuth2User) authentication.getPrincipal();
         String buyerId = buyerGoogleId.getGoogleId();
-
         String buyerName = buyerGoogleId.getName();
 
         ItemEntity item = itemRepository.findById(itemId)
@@ -49,7 +46,29 @@ public class ChatController {
         model.addAttribute("senderName", buyerName);
 
         return "chat"; // The chat room HTML page
+    } 
+
+
+    @GetMapping("/chat/{chatRoomId}")
+    public String chatRoom(@PathVariable Long chatRoomId, Authentication authentication, Model model) {
+        ChatRoom chatRoom = chatService.getChatRoom(chatRoomId);
+        CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
+        String userId = user.getGoogleId();
+        String userName = user.getName();
+
+        model.addAttribute("chatRoomId", chatRoomId);
+        model.addAttribute("senderId", userId);
+        model.addAttribute("senderName", userName);
+
+        return "chat"; // The chat room HTML page
     }
+
+    @MessageMapping("/chat/send/{chatRoomId}")
+    @SendTo("/sub/chat/{chatRoomId}")
+    public ChatMessageDto sendMessage(@DestinationVariable Long chatRoomId, @Payload ChatMessageDto chatMessageDto) {
+        return chatMessageService.saveMessage(chatRoomId, chatMessageDto.getMessage(), chatMessageDto.getSenderId(), chatMessageDto.getSenderName());
+    }
+
 
     @GetMapping("/chat/messages/{chatRoomId}")
     @ResponseBody
@@ -60,7 +79,7 @@ public class ChatController {
                     dto.setId(chatMessage.getId());
                     dto.setChatRoomId(chatRoomId);
                     dto.setSenderId(chatMessage.getSender().getGoogleId());
-                    dto.setSenderName(chatMessage.getSenderName().getName());
+                    dto.setSenderName(chatMessage.getSenderName());
                     dto.setMessage(chatMessage.getMessage());
                     dto.setTimestamp(chatMessage.getTimestamp());
                     return dto;
@@ -71,12 +90,19 @@ public class ChatController {
     @PostMapping("/chat/messages/send")
     public ResponseEntity<ChatMessageDto> sendMessage(@RequestBody ChatMessageDto chatMessageDto) {
         ChatMessageDto savedMessageDto = chatMessageService.saveMessage(chatMessageDto.getChatRoomId(), chatMessageDto.getMessage(), chatMessageDto.getSenderId(), chatMessageDto.getSenderName());
+
         return ResponseEntity.ok(savedMessageDto);
     }
 
-    @MessageMapping("/chat/send/{chatRoomId}")
-    @SendTo("/sub/chat/{chatRoomId}")
-    public ChatMessageDto sendMessage(@DestinationVariable Long chatRoomId, @Payload ChatMessageDto chatMessageDto) {
-        return chatMessageService.saveMessage(chatRoomId, chatMessageDto.getMessage(), chatMessageDto.getSenderId(), chatMessageDto.getSenderName());
+
+    @GetMapping("/myInfo/rooms")
+    public String userChatRooms(Authentication authentication, Model model) {
+        CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
+        String userId = user.getGoogleId();
+        List<ChatRoom> chatRooms = chatService.getUserChatRooms(userId);
+
+        model.addAttribute("chatRooms", chatRooms);
+        return "myInfo"; // 채팅방 목록 페이지
     }
+
 }

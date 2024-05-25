@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+   <style>
+      body {
+         font-family: 'Roboto', sans-serif;
+         background: linear-gradient(to right, #e3f2fd, #fff);
+         color: #333;
+         min-height: 100vh;
+         display: flex;
+         flex-direction: column;
+      }
+
+      .container {
+         max-width: 1200px;
+         margin: 2rem auto;
+         padding: 2rem;
+         background: #fff;
+         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+         border-radius: 0.5rem;
+      }
+
+      .card {
+         transition: transform 0.3s, box-shadow 0.3s;
+         border-radius: 0.5rem;
+         overflow: hidden;
+         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+         background-color: #fff;
+      }
+
+      .card:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+      }
+
+      .card-body {
+         padding: 1.5rem;
+      }
+
+      .card-title {
+         font-size: 1.5rem;
+         font-weight: 700;
+         margin-bottom: 1rem;
+         color: #007bff;
+      }
+
+      .card-text {
+         font-size: 1rem;
+         color: #6c757d;
+         margin-bottom: 1rem;
+      }
+
+      .btn-primary,
+      .btn-success,
+      .btn-back {
+         font-size: 1rem;
+         font-weight: 500;
+         padding: 0.5rem 1.5rem;
+         border-radius: 0.5rem;
+         transition: background-color 0.3s, transform 0.3s;
+      }
+
+      .btn-primary:hover,
+      .btn-success:hover,
+      .btn-back:hover {
+         transform: translateY(-2px);
+      }
+
+      .btn-primary:hover {
+         background-color: #0056b3;
+      }
+
+      .btn-success {
+         background-color: #28a745;
+         color: #fff;
+      }
+
+      .btn-success:hover {
+         background-color: #218838;
+      }
+
+      .btn-back {
+         background-color: #007bff;
+         color: #ffffff;
+         border: none;
+         margin-bottom: 1rem;
+      }
+
+      .section-title {
+         font-size: 2.5rem;
+         font-weight: 700;
+         margin-bottom: 2rem;
+         text-align: center;
+         color: #007bff;
+      }
+
+      .profile-card {
+         display: flex;
+         align-items: center;
+         padding: 1.5rem;
+         background-color: #fff;
+         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+         border-radius: 0.5rem;
+         margin-bottom: 2rem;
+      }
+
+      .profile-card img {
+         border-radius: 50%;
+         width: 100px;
+         height: 100px;
+         object-fit: cover;
+         margin-right: 1.5rem;
+         border: 3px solid #007bff;
+      }
+
+      .profile-card .profile-info {
+         flex: 1;
+      }
+
+      .profile-card .profile-info h2 {
+         margin: 0;
+         font-size: 1.75rem;
+         font-weight: 700;
+         color: #007bff;
+      }
+
+      .profile-card .profile-info p {
+         margin: 0.5rem 0 0;
+         font-size: 1rem;
+         color: #6c757d;
+      }
+
+      .alert-info {
+         background-color: #e3f2fd;
+         color: #007bff;
+         border: 1px solid #b6d4fe;
+      }
+
+      .nav-tabs .nav-link.active {
+         background-color: #007bff;
+         color: #fff;
+         border: none;
+         border-radius: 0.5rem 0.5rem 0 0;
+      }
+
+      .nav-tabs .nav-link {
+         color: #007bff;
+         border: none;
+         border-radius: 0.5rem 0.5rem 0 0;
+      }
+   </style>
+</th:block>
+
+<th:block layout:fragment="script">
+   <script th:inline="javascript">
+      $(document).ready(function(){
+         var errorMessage = [[${errorMessage}]];
+         if(errorMessage != null){
+            alert(errorMessage);
+         }
+
+         bindDomEvent();
+      });
+
+      function bindDomEvent(){
+         $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();  // 이미지 파일명
+            var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+            fileExt = fileExt.toLowerCase(); // 소문자 변환
+
+            if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+               alert("이미지 파일만 등록이 가능합니다.");
+               return;
+            }
+
+            $(this).siblings(".custom-file-label").html(fileName);
+         });
+      }
+      $(document).on('click', '.btn-delete', function(e) {
+         e.preventDefault(); // 기본 이벤트를 방지
+         var itemId = $(this).data('itemid'); // 데이터 속성에서 상품 ID 추출
+
+         if(confirm('해당 상품을 삭제하시겠습니까?')) {
+            $.ajax({
+               url: '/user/item/' + itemId + '/delete', // 삭제 처리를 위한 URL
+               type: 'POST', // HTTP 메소드를 POST로 변경
+               success: function(result) {
+                  location.reload();
+               }
+            });
+         }
+      });
+   </script>
+</th:block>
+
+<div layout:fragment="content" class="container">
+   <button class="btn btn-back" onclick="history.back()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
+   <div class="profile-card">
+      <div class="profile-info">
+         <h2 th:text="${#authentication.name}">사용자 이름</h2>
+      </div>
+   </div>
+
+   <div>
+      <a th:href="@{/myInfo/items}" class="btn btn-primary mb-3">내 상품 목록</a>
+      <div class="row">
+         <!-- 아이템 목록을 반복해서 보여줌 -->
+         <div th:each="item : ${items}" class="col-md-4 mt-3">
+            <div class="card">
+               <!-- 아이템 정보 -->
+               <div class="card-body">
+                  <h5 class="card-title" th:text="${item.itemName}">Item Name</h5>
+                  <p class="card-text" th:text="${item.description}">Description</p>
+                  <p class="card-text"><strong>Price:</strong> <span th:text="${item.price}">가격</span></p>
+                  <!-- 수정 버튼, 각 아이템의 ID를 기반으로 수정 페이지로 연결 -->
+                  <a th:if="${not #strings.isEmpty(item.id)}" th:href="@{/user/item/{id}(id=${item.id})}" class="btn btn-primary">수정</a>
+                  <button type="button" th:attr="data-itemId=${item.id}" class="btn btn-danger btn-delete">삭제</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div>
+      <a th:href="@{/myInfo/rooms}" class="btn btn-primary mb-3">내 채팅방 목록</a>
+      <div class="row">
+         <!-- 채팅방 목록을 반복해서 보여줌 -->
+         <div th:each="room : ${chatRooms}" class="col-md-4 mt-3">
+            <div class="card">
+               <div class="card-body">
+                  <h5 class="card-title">채팅방: <span th:text="${room.item.itemName}">Room ID</span></h5>
+                  <p class="card-text">판매자: <span th:text="${room.seller.name}">Seller</span></p>
+                  <p class="card-text">구매자: <span th:text="${room.buyer.name}">Buyer</span></p>
+                  <a th:href="@{/chat/{id}(id=${room.id})}" class="btn btn-primary">채팅방 입장</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div>
+      <h2 class="section-title">알림</h2>
+      <div class="alert alert-info" role="alert">
+         아직 새로운 알림이 없습니다.
+      </div>
+   </div>
+</div>
+</html>

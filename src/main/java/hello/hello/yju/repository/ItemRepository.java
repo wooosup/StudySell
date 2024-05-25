@@ -11,24 +11,8 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long>,
     QuerydslPredicateExecutor<ItemEntity>, ItemRepositoryCustom {
-        List<ItemEntity> findByItemName(String itemName);
-
         Optional<ItemEntity> findById(Long itemId);
 
         List<ItemEntity> findByUser_GoogleId(String googleId);
-
-        List<ItemEntity> findByItemNameOrDescription(String itemName, String description);
-
-        List<ItemEntity> findByPriceLessThan(Integer price);
-
-        List<ItemEntity> findByPriceLessThanOrderByPriceDesc(Integer price);
-
-    @Query("select i from ItemEntity i where i.description like " +
-            "%:description% order by i.price desc")
-    List<ItemEntity> findByDescription(@Param("description") String description);
-
-    @Query(value="select * from item i where i.description like " +
-                "%:description% order by i.price desc", nativeQuery = true)
-        List<ItemEntity> findByDescriptionByNative(@Param("description") String description);
 
     }

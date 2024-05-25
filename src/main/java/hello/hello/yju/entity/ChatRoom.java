@@ -27,6 +27,6 @@ public class ChatRoom {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private ItemEntity item;
 
+    private ItemEntity item;
 }
