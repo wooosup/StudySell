@@ -22,7 +22,6 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
-    private final AlarmService alarmService;
 
     @Transactional
     public ChatMessageDto saveMessage(Long chatRoomId, String message, String senderId, String senderName) {
@@ -50,10 +49,6 @@ public class ChatMessageService {
         chatMessageDto.setSenderName(chatMessage.getSenderName());
         chatMessageDto.setMessage(chatMessage.getMessage());
         chatMessageDto.setTimestamp(chatMessage.getTimestamp());
-
-        // 알림 전송
-        String recipientId = chatRoom.getOtherUserId(sender.getGoogleId());
-        alarmService.alarmByMessage(recipientId, chatMessageDto);
 
 
         return chatMessageDto;
