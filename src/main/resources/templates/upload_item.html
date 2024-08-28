@@ -106,7 +106,7 @@
     <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}"
           th:action="${#strings.isEmpty(itemFormDto.id) ? '@{/item/new}' : '@{/item/{id}(id=${itemFormDto.id})}'}" class="upload-form shadow p-3 mb-5 bg-white rounded">
         <input type="hidden" th:field="*{id}">
-        <h2 class="text-center mb-4">상품 업로드</h2>
+        <h2 class="text-center mb-4">판매하기</h2>
         <div class="form-group">
             <label for="itemSellStatus">판매 상태</label>
             <select th:field="*{itemSellStatus}" class="form-control custom-select">

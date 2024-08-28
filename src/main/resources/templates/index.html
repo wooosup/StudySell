@@ -88,7 +88,7 @@
     <div id="carouselControls" class="carousel slide margin" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active item">
-                <img class="d-block w-100 banner" src="/images/banner.svg" alt="First slide">
+                <img class="d-block w-100 banner" src="images/banner.svg" alt="First slide">
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
             <div class="col-lg-4 col-md-4 col-sm-6 margin">
                 <div class="card custom-card position-relative">
                     <!-- 링크에 로그인 체크 함수 추가 -->
-                    <a th:href="'/item/' + ${item.id}" class="text-dark" onclick="checkLogin(event, isAuthenticated)">
+                    <a th:href="'item/' + ${item.id}" class="text-dark" onclick="checkLogin(event, isAuthenticated)">
                         <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemName}" height="400">
                         <div class="card-body">
                             <h4 class="card-title">[[${item.itemName}]]</h4>
