@@ -3,17 +3,13 @@ package hello.hello.yju.service;
 import hello.hello.yju.dto.CustomOAuth2User;
 import hello.hello.yju.dto.GoogleResponse;
 import hello.hello.yju.dto.OAuth2Response;
-import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
