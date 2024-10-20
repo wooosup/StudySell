@@ -27,40 +27,7 @@ public class ItemRepositoryCustomImpl implements  ItemRepositoryCustom{
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
-
-    private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus){
-        return searchSellStatus == null ? null : QItemEntity.itemEntity.itemSellStatus.eq(searchSellStatus);
-    }
-
-    private BooleanExpression regDtsAfter(String searchDateType){
-
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        if(StringUtils.equals("all", searchDateType) || searchDateType == null){
-            return null;
-        } else if(StringUtils.equals("1d", searchDateType)){
-            dateTime = dateTime.minusDays(1);
-        } else if(StringUtils.equals("1w", searchDateType)){
-            dateTime = dateTime.minusWeeks(1);
-        } else if(StringUtils.equals("1m", searchDateType)){
-            dateTime = dateTime.minusMonths(1);
-        } else if(StringUtils.equals("6m", searchDateType)){
-            dateTime = dateTime.minusMonths(6);
-        }
-
-        return QItemEntity.itemEntity.regTime.after(dateTime);
-    }
-
-    private BooleanExpression searchByLike(String searchBy, String searchQuery){
-
-        if(StringUtils.equals("itemName", searchBy)){
-            return QItemEntity.itemEntity.itemName.like("%" + searchQuery + "%");
-        } else if(StringUtils.equals("createdBy", searchBy)){
-            return QItemEntity.itemEntity.createdBy.like("%" + searchQuery + "%");
-        }
-
-        return null;
-    }
+    
     private BooleanExpression itemNameLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QItemEntity.itemEntity.itemName.like("%" + searchQuery + "%");
     }
