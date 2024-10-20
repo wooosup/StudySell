@@ -4,27 +4,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
 
-    private final S3Service s3Service;
+//    private final S3Service s3Service;
+    private final FileStore fileStore;
 
     public String uploadFile(String originalFileName, byte[] fileData) throws IOException {
         MultipartFile multipartFile = new InMemoryMultipartFile(originalFileName, fileData);
-        return s3Service.uploadFile(multipartFile);
+        return fileStore.uploadFile(multipartFile);
     }
 
-    public void deleteFile(String filePath) {
-        s3Service.deleteFile(filePath);
+    public void deleteFile(String filePath) throws IOException {
+        fileStore.deleteFile(filePath);
     }
 
     public String generateFileUrl(String filePath) {
-        return s3Service.getFileUrl(filePath);
+        return fileStore.generateFileUrl(filePath);
     }
 
     private static class InMemoryMultipartFile implements MultipartFile {
@@ -54,7 +53,7 @@ public class FileService {
 
         @Override
         public boolean isEmpty() {
-            return fileData == null || fileData.length == 0;
+            return fileData.length == 0;
         }
 
         @Override
@@ -73,8 +72,10 @@ public class FileService {
         }
 
         @Override
-        public void transferTo(java.io.File dest) {
-            throw new UnsupportedOperationException("transferTo() 메서드는 지원되지 않습니다.");
+        public void transferTo(File dest) throws IOException {
+            try (FileOutputStream fos = new FileOutputStream(dest)) {
+                fos.write(fileData);
+            }
         }
     }
 }

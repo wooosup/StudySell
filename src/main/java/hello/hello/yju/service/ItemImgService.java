@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -47,7 +49,7 @@ public class ItemImgService {
         }
     }
 
-    public void deleteItemImg(ItemImg itemImg) {
+    public void deleteItemImg(ItemImg itemImg) throws IOException {
         if (!StringUtils.isEmpty(itemImg.getImgName())) {
             fileService.deleteFile(itemImg.getImgName());
         }
