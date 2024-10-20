@@ -31,13 +31,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         System.out.println(oAuth2User.getAttributes());
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-
         OAuth2Response oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 
-        if (!oAuth2Response.getEmail().endsWith("@g.yju.ac.kr")) {
-            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_domain"), "유효하지 않은 이메일 도메인입니다.");
-        }
+//        if (!oAuth2Response.getEmail().endsWith("@g.yju.ac.kr")) {
+//            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_domain"), "유효하지 않은 이메일 도메인입니다.");
+//        }
 
         String googleId = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
         UserEntity existData = userRepository.findByGoogleId(googleId);
