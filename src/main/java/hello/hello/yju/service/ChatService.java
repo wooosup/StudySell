@@ -1,6 +1,5 @@
 package hello.hello.yju.service;
 
-import hello.hello.yju.dto.ChatMessageDto;
 import hello.hello.yju.dto.ChatRoomDto;
 import hello.hello.yju.entity.ChatMessage;
 import hello.hello.yju.entity.ChatRoom;
