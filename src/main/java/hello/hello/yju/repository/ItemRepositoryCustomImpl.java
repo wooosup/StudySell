@@ -7,8 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.hello.yju.dto.ItemSearchDto;
 import hello.hello.yju.dto.MainItemDto;
 import hello.hello.yju.dto.QMainItemDto;
-import hello.hello.yju.entity.ItemEntity;
-import hello.hello.yju.entity.ItemSellStatus;
 import hello.hello.yju.entity.QItemEntity;
 import hello.hello.yju.entity.QItemImg;
 import jakarta.persistence.EntityManager;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.thymeleaf.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemRepositoryCustomImpl implements  ItemRepositoryCustom{
@@ -27,7 +24,7 @@ public class ItemRepositoryCustomImpl implements  ItemRepositoryCustom{
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
-    
+
     private BooleanExpression itemNameLike(String searchQuery){
         return StringUtils.isEmpty(searchQuery) ? null : QItemEntity.itemEntity.itemName.like("%" + searchQuery + "%");
     }
