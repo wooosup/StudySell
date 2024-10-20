@@ -2,6 +2,7 @@ package hello.hello.yju.dto;
 
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemSellStatus;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
@@ -17,8 +18,10 @@ public class ItemFormDto {
 
     private String department;
 
+    @NotBlank(message = "상품명을 입력해주세요.")
     private String itemName;
 
+    @NotBlank(message = "설명을 입력해주세요.")
     private String description;
 
     private Integer price;

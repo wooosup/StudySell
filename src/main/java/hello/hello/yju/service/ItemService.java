@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void deleteItem(Long itemId) {
+    public void deleteItem(Long itemId) throws IOException {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
 
         if (!itemImgList.isEmpty()) {
