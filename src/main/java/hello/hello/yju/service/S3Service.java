@@ -2,6 +2,7 @@ package hello.hello.yju.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,8 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+@Profile("prod")
+public class S3Service implements FileStore {
 
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName;
@@ -47,7 +49,8 @@ public class S3Service {
                 .build());
     }
 
-    public String getFileUrl(String fileName) {
+    @Override
+    public String generateFileUrl(String fileName) {
         URL url = s3Client.utilities().getUrl(b -> b.bucket(bucketName).key(fileName));
         return url.toString();
     }
