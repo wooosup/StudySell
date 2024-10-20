@@ -31,7 +31,7 @@ public class ChatService {
         UserEntity seller = userRepository.findByGoogleId(sellerId);
         UserEntity buyer = userRepository.findByGoogleId(buyerId);
         ItemEntity item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid item ID"));
+                .orElseThrow(() -> new IllegalArgumentException("아이템을 찾지 못했습니다."));
 
         // 동일한 채팅방이 이미 존재하는지 확인
         Optional<ChatRoom> existingChatRoom = chatRoomRepository.findBySellerAndBuyerAndItem(seller, buyer, item);
@@ -61,7 +61,7 @@ public class ChatService {
 
     public List<ChatMessage> getChatMessages(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID"));
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
         return chatMessageRepository.findByChatRoom(chatRoom);
     }
 
@@ -72,7 +72,7 @@ public class ChatService {
 
     public ChatRoom getChatRoom(Long chatRoomId) {
         return chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID"));
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
     }
 
     public UserEntity getUser(String googleId) {

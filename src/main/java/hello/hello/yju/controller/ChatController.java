@@ -102,7 +102,7 @@ public class ChatController {
         List<ChatRoom> chatRooms = chatService.getUserChatRooms(userId);
 
         model.addAttribute("chatRooms", chatRooms);
-        return "myInfo"; // 채팅방 목록 페이지
+        return "myInfo";
     }
 
 }

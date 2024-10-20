@@ -26,11 +26,11 @@ public class ChatMessageService {
     @Transactional
     public ChatMessageDto saveMessage(Long chatRoomId, String message, String senderId, String senderName) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID"));
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
 
         UserEntity sender = userRepository.findByGoogleId(senderId);
         if (sender == null) {
-            throw new IllegalArgumentException("Invalid sender ID");
+            throw new IllegalArgumentException("발신자를 찾지 못했습니다.");
         }
 
         ChatMessage chatMessage = new ChatMessage();

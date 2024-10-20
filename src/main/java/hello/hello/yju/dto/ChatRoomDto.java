@@ -10,5 +10,5 @@ public class ChatRoomDto {
     private Long id;
     private String sellerId;
     private String buyerId;
-    private Long itemId;
+    private Long itemId ;
 }
