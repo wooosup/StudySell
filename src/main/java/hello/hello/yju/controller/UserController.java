@@ -29,15 +29,13 @@ public class UserController {
 
     @GetMapping("/myInfo/items")
     public String getMyItems(Authentication authentication, Model model) {
-        if (authentication.getPrincipal() instanceof CustomOAuth2User) { // 'if' 조건문 추가
+        if (authentication.getPrincipal() instanceof CustomOAuth2User) {
             CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
             String googleId = customOAuth2User.getGoogleId();
             List<ItemEntity> items = userService.findItemsById(googleId);
 
-            // 모델에 아이템 목록 추가
             model.addAttribute("items", items);
         }
-        // Thymeleaf 템플릿 반환
         return "myInfo";
     }
 
