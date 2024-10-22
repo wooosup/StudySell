@@ -24,7 +24,6 @@ public class UserService {
         if (user != null) {
             return itemRepository.findByUser_GoogleId(user.getGoogleId());
         } else {
-            // 사용자를 찾을 수 없는 경우, 빈 목록 반환
             return Collections.emptyList();
         }
     }

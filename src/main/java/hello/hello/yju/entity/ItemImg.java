@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "item_img")
 @Getter
 @Setter
-public class ItemImg extends BaseEntity{
+public class ItemImg extends BaseTimeEntity{
 
     @Id
     @Column(name = "item_img_id")

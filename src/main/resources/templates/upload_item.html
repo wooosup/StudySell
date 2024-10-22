@@ -3,49 +3,70 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <th:block layout:fragment="css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #e3f2fd, #fff);
+            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+            color: #333;
         }
 
         .upload-form {
             background-color: #ffffff;
             padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        .btn-primary {
+        .btn-primary, .btn-back {
             font-size: 1.2rem;
             padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover, .btn-back:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
         }
 
         .btn-back {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #ff7676, #ff4949);
             color: #ffffff;
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-            margin-bottom: 1rem;
-            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .btn-back:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+        .btn-back i {
+            margin-right: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .img-preview {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-file-label {
+            cursor: pointer;
         }
 
         .fieldError {
@@ -53,17 +74,6 @@
             font-size: 0.875rem;
         }
 
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-        }
-
-        .img-preview {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-        }
     </style>
 </th:block>
 <th:block layout:fragment="script">
@@ -108,14 +118,14 @@
         <input type="hidden" th:field="*{id}">
         <h2 class="text-center mb-4">판매하기</h2>
         <div class="form-group">
-            <label for="itemSellStatus">판매 상태</label>
+            <label th:for="itemSellStatus">판매 상태</label>
             <select th:field="*{itemSellStatus}" class="form-control custom-select">
                 <option value="SELL">판매중</option>
                 <option value="Reservation">거래대기</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="department">학과</label>
+            <label th:for="department">학과</label>
             <select th:field="*{department}" class="form-control custom-select">
                 <option value="컴퓨터과">컴퓨터과</option>
                 <option value="간호학과">간호학과</option>
@@ -124,20 +134,23 @@
             <p th:if="${#fields.hasErrors('department')}" th:errors="*{department}" class="fieldError">Incorrect data</p>
         </div>
         <div class="form-group">
-            <label for="itemName">책 명</label>
-            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력해주세요">
+            <label th:for="itemName">책 명</label>
+            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품 명을 입력해주세요">
             <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="fieldError">Incorrect data</p>
         </div>
+
         <div class="form-group">
-            <label for="description">책 설명</label>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{description}"></textarea>
+            <label th:for="description">책 설명</label>
+            <textarea class="form-control" aria-label="With textarea" th:field="*{description}" ></textarea>
             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="fieldError">Incorrect data</p>
         </div>
+
         <div class="form-group">
-            <label for="price">가격</label>
+            <label th:for="price">가격</label>
             <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력해주세요">
             <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
         </div>
+
         <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
             <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
                 <div class="custom-file img-div">

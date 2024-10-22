@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "item")
-public class ItemEntity extends BaseEntity {
+public class ItemEntity extends BaseTimeEntity {
 
     @Id
     @Column(name = "item_id")
