@@ -3,8 +3,10 @@ package hello.hello.yju.dto;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemSellStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -18,12 +20,14 @@ public class ItemFormDto {
 
     private String department;
 
-    @NotBlank(message = "상품명을 입력해주세요.")
+    @NotBlank(message = "상품 명을 입력해주세요.")
     private String itemName;
 
-    @NotBlank(message = "설명을 입력해주세요.")
+    @NotBlank(message = "상품의 설명을 입력해주세요.")
     private String description;
 
+    @NotNull(message = "가격은 1000원 이상이어야 합니다.")
+    @Range(min = 1000, max = 1000000)
     private Integer price;
 
     private String googleId;
