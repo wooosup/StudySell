@@ -5,7 +5,7 @@
 
 ---
 <div align="center">
-    <img src="src/main/resources/static/images/img.png" width="550">
+    <img src="img.png" width="550">
 </div>
 
 #### 프로젝트 유형: 팀 프로젝트 (팀장)  
