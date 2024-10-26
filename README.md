@@ -23,14 +23,14 @@
 ## 기능
 ### 기능 1: 소셜 로그인
 <div align="center">
-    <img src="src/main/resources/static/images/img_1.png" width="400">
+    <img src="img_1.png" width="400">
 </div>
 
 - 대학 이메일 인증으로 접근을 제한하여 같은 학교 학생들이 책을 빠르게 사고 팔 수 있도록 하였습니다. (예: @g.yju.ac.kr)
 
 ### 기능 2: 상품 판매
 <div align="center">
-    <img src="src/main/resources/static/images/img_2.png" width="400">
+    <img src="img_2.png" width="400">
 </div>
 
 - 상태는 판매에서는 고정이며 수정할 때 변경 할 수 있습니다.
@@ -38,16 +38,16 @@
 
 ### 기능 3: 채팅 서비스
 <div align="center">
-    <img src="src/main/resources/static/images/img_3.png" width="100">
-    <img src="src/main/resources/static/images/img_4.png" width="400">
+    <img src="img_3.png" width="100">
+    <img src="img_4.png" width="400">
 </div>
 
 - 상품의 상세 페이지에서 채팅하기를 누르면 실시간으로 채팅을 할 수 있습니다.
 
 ### 기능 4: 마이페이지
 <div align="center">
-    <img src="src/main/resources/static/images/img_5.png">
-    <img src="src/main/resources/static/images/img_6.png">
+    <img src="img_5.png">
+    <img src="img_6.png">
 </div>
 
 - 사용자의 이름이 표시되고 판매중인 상품 목록, 채팅 중인 채팅방을 입장할 수 있습니다.
