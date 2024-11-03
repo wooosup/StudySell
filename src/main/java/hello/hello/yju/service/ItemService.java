@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -64,14 +64,12 @@ public class ItemService {
         return itemEntity.getId();
     }
 
-    @Transactional(readOnly = true)
     public ItemFormDto getItemDtl(Long itemId) {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
-        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-        for (ItemImg itemImg : itemImgList) {
-            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
-            itemImgDtoList.add(itemImgDto);
-        }
+
+        List<ItemImgDto> itemImgDtoList = itemImgList.stream()
+                .map(ItemImgDto::of)
+                .collect(Collectors.toList());
 
         ItemEntity itemEntity = itemRepository.findById(itemId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -107,7 +105,6 @@ public class ItemService {
         chatService.deleteChatRoomsByItemId(itemId);
         itemRepository.deleteById(itemId);
     }
-    @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }

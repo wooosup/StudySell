@@ -26,56 +26,48 @@ public class FileService {
         return fileStore.generateFileUrl(filePath);
     }
 
-    private static class InMemoryMultipartFile implements MultipartFile {
-
-        private final String originalFileName;
-        private final byte[] fileData;
-
-        public InMemoryMultipartFile(String originalFileName, byte[] fileData) {
-            this.originalFileName = originalFileName;
-            this.fileData = fileData;
-        }
+    private record InMemoryMultipartFile(String originalFileName, byte[] fileData) implements MultipartFile {
 
         @Override
-        public String getName() {
-            return originalFileName;
-        }
+            public String getName() {
+                return originalFileName;
+            }
 
-        @Override
-        public String getOriginalFilename() {
-            return originalFileName;
-        }
+            @Override
+            public String getOriginalFilename() {
+                return originalFileName;
+            }
 
-        @Override
-        public String getContentType() {
-            return "application/octet-stream";
-        }
+            @Override
+            public String getContentType() {
+                return "application/octet-stream";
+            }
 
-        @Override
-        public boolean isEmpty() {
-            return fileData.length == 0;
-        }
+            @Override
+            public boolean isEmpty() {
+                return fileData.length == 0;
+            }
 
-        @Override
-        public long getSize() {
-            return fileData.length;
-        }
+            @Override
+            public long getSize() {
+                return fileData.length;
+            }
 
-        @Override
-        public byte[] getBytes() {
-            return fileData;
-        }
+            @Override
+            public byte[] getBytes() {
+                return fileData;
+            }
 
-        @Override
-        public InputStream getInputStream() {
-            return new ByteArrayInputStream(fileData);
-        }
+            @Override
+            public InputStream getInputStream() {
+                return new ByteArrayInputStream(fileData);
+            }
 
-        @Override
-        public void transferTo(File dest) throws IOException {
-            try (FileOutputStream fos = new FileOutputStream(dest)) {
-                fos.write(fileData);
+            @Override
+            public void transferTo(File dest) throws IOException {
+                try (FileOutputStream fos = new FileOutputStream(dest)) {
+                    fos.write(fileData);
+                }
             }
         }
-    }
 }
