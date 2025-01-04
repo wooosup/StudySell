@@ -1,14 +1,11 @@
 package hello.hello.yju.controller;
 
 
-
-import hello.hello.yju.dto.CustomOAuth2User;
+import hello.hello.yju.dto.user.CustomOAuth2User;
 import hello.hello.yju.entity.ItemEntity;
-import hello.hello.yju.repository.UserRepository;
 import hello.hello.yju.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +17,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping("/myInfo")
     public String myInfo() {
