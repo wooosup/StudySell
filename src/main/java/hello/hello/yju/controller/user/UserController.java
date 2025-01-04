@@ -34,6 +34,4 @@ public class UserController {
         }
         return "myInfo";
     }
-
-
 }
