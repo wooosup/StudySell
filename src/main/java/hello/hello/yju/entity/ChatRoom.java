@@ -1,12 +1,16 @@
 package hello.hello.yju.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "chat_room")
 public class ChatRoom {
 
@@ -14,16 +18,23 @@ public class ChatRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "seller_id")
     private UserEntity seller;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "buyer_id")
     private UserEntity buyer;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
 
     private ItemEntity item;
+
+    @Builder
+    private ChatRoom(UserEntity seller, UserEntity buyer, ItemEntity item) {
+        this.seller = seller;
+        this.buyer = buyer;
+        this.item = item;
+    }
 }
