@@ -30,12 +30,7 @@ public class S3Service implements FileStore {
     public String uploadFile(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         try (InputStream inputStream = file.getInputStream()) {
-            s3Client.putObject(PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(fileName)
-                            .acl("public-read")
-                            .build(),
-                    RequestBody.fromInputStream(inputStream, file.getSize()));
+            setS3(file, fileName, inputStream);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.", e);
         }
@@ -53,6 +48,15 @@ public class S3Service implements FileStore {
     public String generateFileUrl(String fileName) {
         URL url = s3Client.utilities().getUrl(b -> b.bucket(bucketName).key(fileName));
         return url.toString();
+    }
+
+    private void setS3(MultipartFile file, String fileName, InputStream inputStream) {
+        s3Client.putObject(PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(fileName)
+                        .acl("public-read")
+                        .build(),
+                RequestBody.fromInputStream(inputStream, file.getSize()));
     }
 
     private String createFileName(String fileName) {
