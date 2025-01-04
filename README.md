@@ -8,6 +8,7 @@
     <img src="readmeImage/img.png" width="550">
 </div>
 
+#### 2025/01/05 리팩터링 시작
 #### 프로젝트 유형: 팀 프로젝트 (팀장)  
 #### 프로젝트 기간: 2024년 4월 - 2024년 6월  
 #### 사용 기술: Spring Boot, JPA, QueryDSL, EC2, RDS, S3, MariaDB, Git
