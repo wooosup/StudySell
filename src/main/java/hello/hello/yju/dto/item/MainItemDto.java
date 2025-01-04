@@ -1,6 +1,7 @@
-package hello.hello.yju.dto;
+package hello.hello.yju.dto.item;
 
 import com.querydsl.core.annotations.QueryProjection;
+import hello.hello.yju.dto.TimeUtils;
 import lombok.Getter;
 import lombok.Setter;
 
