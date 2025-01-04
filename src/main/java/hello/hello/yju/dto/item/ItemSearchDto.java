@@ -1,4 +1,4 @@
-package hello.hello.yju.dto;
+package hello.hello.yju.dto.item;
 
 import hello.hello.yju.entity.ItemSellStatus;
 import lombok.Getter;
