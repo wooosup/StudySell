@@ -1,4 +1,4 @@
-package hello.hello.yju.repository;
+package hello.hello.yju.repository.item;
 
 
 import com.querydsl.core.types.dsl.BooleanExpression;
