@@ -19,6 +19,7 @@ public class ChatMessageRequest {
     private String message;
     private LocalDateTime timestamp;
 
+
     @Builder
     private ChatMessageRequest(Long chatRoomId, String senderId, String senderName, String message, LocalDateTime timestamp) {
         this.chatRoomId = chatRoomId;

@@ -16,6 +16,7 @@ public class ChatMessageDto {
     private final String message;
     private final LocalDateTime timestamp;
 
+
     @Builder
     private ChatMessageDto(Long id, Long chatRoomId, String senderId, String senderName, String message, LocalDateTime timestamp) {
         this.id = id;
