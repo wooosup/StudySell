@@ -2,8 +2,8 @@ package hello.hello.yju.service;
 
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
-import hello.hello.yju.repository.ItemRepository;
-import hello.hello.yju.repository.UserRepository;
+import hello.hello.yju.repository.item.ItemRepository;
+import hello.hello.yju.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

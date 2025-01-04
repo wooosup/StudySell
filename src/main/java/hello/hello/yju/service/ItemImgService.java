@@ -1,7 +1,7 @@
 package hello.hello.yju.service;
 
 import hello.hello.yju.entity.ItemImg;
-import hello.hello.yju.repository.ItemImgRepository;
+import hello.hello.yju.repository.item.ItemImgRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

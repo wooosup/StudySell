@@ -4,7 +4,7 @@ import hello.hello.yju.dto.user.CustomOAuth2User;
 import hello.hello.yju.dto.user.GoogleResponse;
 import hello.hello.yju.dto.user.OAuth2Response;
 import hello.hello.yju.entity.UserEntity;
-import hello.hello.yju.repository.UserRepository;
+import hello.hello.yju.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
