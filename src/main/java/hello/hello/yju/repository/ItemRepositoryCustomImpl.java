@@ -4,9 +4,9 @@ package hello.hello.yju.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hello.hello.yju.dto.ItemSearchDto;
-import hello.hello.yju.dto.MainItemDto;
-import hello.hello.yju.dto.QMainItemDto;
+import hello.hello.yju.dto.item.ItemSearchDto;
+import hello.hello.yju.dto.item.MainItemDto;
+import hello.hello.yju.dto.item.QMainItemDto;
 import hello.hello.yju.entity.QItemEntity;
 import hello.hello.yju.entity.QItemImg;
 import jakarta.persistence.EntityManager;
@@ -17,9 +17,11 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
+;
+
 public class ItemRepositoryCustomImpl implements  ItemRepositoryCustom{
 
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
