@@ -39,11 +39,10 @@ public class LocalFileStore implements FileStore{
     public void deleteFile(String filePath) throws IOException {
         String fullPath = Paths.get(uploadDir, filePath).toString();
         File file = new File(fullPath);
-        if (file.exists()) {
-            if (!file.delete()) {
+        if (file.exists() && !file.delete()) {
                 throw new IOException("파일 삭제에 실패했습니다: " + fullPath);
             }
-        }
+
     }
 
     @Override
