@@ -1,4 +1,4 @@
-package hello.hello.yju.repository;
+package hello.hello.yju.repository.item;
 
 import hello.hello.yju.entity.ItemImg;
 import org.springframework.data.jpa.repository.JpaRepository;

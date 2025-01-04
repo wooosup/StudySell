@@ -1,4 +1,4 @@
-package hello.hello.yju.repository;
+package hello.hello.yju.repository.chat;
 
 
 import hello.hello.yju.entity.ChatRoom;

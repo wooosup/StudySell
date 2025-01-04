@@ -1,4 +1,4 @@
-package hello.hello.yju.repository;
+package hello.hello.yju.repository.user;
 
 import hello.hello.yju.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
