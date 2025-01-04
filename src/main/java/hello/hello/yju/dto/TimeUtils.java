@@ -21,5 +21,6 @@ public class TimeUtils {
         } else {
             return days + "일 전";
         }
+
     }
 }
