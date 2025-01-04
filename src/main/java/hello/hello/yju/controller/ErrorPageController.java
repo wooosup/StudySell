@@ -6,15 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
+@RequestMapping("/error")
 public class ErrorPageController {
 
-    @RequestMapping("/error/404")
+    @RequestMapping("/404")
     public String errorPage404() {
         log.info("errorPage404");
         return "error/404";
     }
 
-    @RequestMapping("/error/500")
+    @RequestMapping("/500")
     public String errorPage500() {
         log.info("errorPage500");
         return "error/500";
