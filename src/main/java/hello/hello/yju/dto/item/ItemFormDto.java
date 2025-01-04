@@ -1,4 +1,4 @@
-package hello.hello.yju.dto;
+package hello.hello.yju.dto.item;
 
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.ItemSellStatus;
@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +41,16 @@ public class ItemFormDto {
 
     private List<Long> itemImgIds = new ArrayList<>();
 
-    public ItemEntity createItem(){
-        return modelMapper.map(this, ItemEntity.class);
+    public ItemEntity toEntity() {
+        return ItemEntity.builder()
+                .department(this.department)
+                .itemName(this.itemName)
+                .description(this.description)
+                .price(this.price)
+                .itemSellStatus(this.itemSellStatus)
+                .build();
     }
+
 
     public static ItemFormDto of(ItemEntity itemEntity) {
         return modelMapper.map(itemEntity, ItemFormDto.class);
