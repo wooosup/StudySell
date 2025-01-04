@@ -129,7 +129,6 @@
 </head>
 
 <body>
-
 <div layout:fragment="content" class="container my-5">
     <button class="btn btn-back" onclick="history.back()"><i class="bi bi-arrow-left-circle"></i> 뒤로가기</button>
     <input type="hidden" id="itemId" th:value="${item.id}">
@@ -138,8 +137,14 @@
             <img th:src="${item.itemImgDtoList[0].imgUrl}" class="img-fluid img-thumbnail" th:alt="${item.itemName}" data-bs-toggle="modal" data-bs-target="#imageModal">
         </div>
         <div class="col-md-6">
-            <span th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="badge badge-primary badge-status mb-3"><i class="bi bi-check-circle"></i> 판매중</span>
-            <span th:unless="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="badge badge-danger badge-status mb-3"><i class="bi bi-hourglass-split"></i> 거래대기</span>
+            <!-- 상태별 배지 표시 -->
+            <span th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="badge badge-primary badge-status mb-3">
+                <i class="bi bi-check-circle"></i> 판매중</span>
+            <span th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).Reservation}" class="badge badge-warning badge-status mb-3">
+                <i class="bi bi-hourglass-split"></i>거래 대기</span>
+            <span th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SOLD_OUT}" class="badge badge-dark badge-status mb-3">
+                <i class="bi bi-x-circle"></i> 판매완료</span>
+
             <h2 th:text="${item.itemName}" class="product-title"></h2>
             <div class="price">
                 <input type="hidden" th:value="${item.price}" id="price" name="price">
@@ -147,8 +152,20 @@
             </div>
             <div class="mt-4">
                 <form th:action="@{/chat/create/{itemId}(itemId=${item.id})}" method="post">
-                    <button type="submit" th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="btn btn-primary btn-chat"><i class="bi bi-chat-dots"></i> 채팅하기</button>
-                    <button type="button" th:unless="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="btn btn-danger btn-waiting" disabled><i class="bi bi-hourglass-split"></i> 거래대기</button>
+                    <!-- 판매중일 때만 채팅하기 버튼 활성화 -->
+                    <button type="submit" th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SELL}" class="btn btn-primary btn-chat">
+                        <i class="bi bi-chat-dots"></i> 채팅하기
+                    </button>
+
+                    <!-- 예약 중일 때 -->
+                    <button type="button" th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).Reservation}" class="btn btn-warning btn-waiting" disabled>
+                        <i class="bi bi-hourglass-split"></i> 거래 대기
+                    </button>
+
+                    <!-- 판매완료일 때 -->
+                    <button type="button" th:if="${item.itemSellStatus == T(hello.hello.yju.entity.ItemSellStatus).SOLD_OUT}" class="btn btn-dark" disabled>
+                        <i class="bi bi-x-circle"></i> 판매완료
+                    </button>
                 </form>
             </div>
         </div>
