@@ -188,9 +188,9 @@
          <div th:each="room : ${chatRooms}" class="col-md-4 mt-3">
             <div class="card">
                <div class="card-body">
-                  <h5 class="card-title">채팅방: <span th:text="${room.item.itemName}">Room ID</span></h5>
-                  <p class="card-text">판매자: <span th:text="${room.seller.name}">Seller</span></p>
-                  <p class="card-text">구매자: <span th:text="${room.buyer.name}">Buyer</span></p>
+                  <h5 class="card-title">채팅방: <span th:text="${room.itemName}">Room ID</span></h5>
+                  <p class="card-text">판매자: <span th:text="${room.sellerName}">Seller</span></p>
+                  <p class="card-text">구매자: <span th:text="${room.buyerName}">Buyer</span></p>
                   <a th:href="@{/chat/{id}(id=${room.id})}" class="btn btn-primary">채팅방 입장</a>
                </div>
             </div>
@@ -205,5 +205,4 @@
       </div>
    </div>
 </div>
-
 </html>
