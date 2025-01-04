@@ -1,10 +1,11 @@
 package hello.hello.yju.service;
 
-import hello.hello.yju.dto.CustomOAuth2User;
-import hello.hello.yju.dto.GoogleResponse;
-import hello.hello.yju.dto.OAuth2Response;
+import hello.hello.yju.dto.user.CustomOAuth2User;
+import hello.hello.yju.dto.user.GoogleResponse;
+import hello.hello.yju.dto.user.OAuth2Response;
 import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -12,14 +13,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
     private final UserRepository userRepository;
-
-    public CustomOAuth2UserService(UserRepository userRepository) {
-
-        this.userRepository = userRepository;
-    }
-
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
@@ -29,10 +26,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2Response oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 
-//        if (!oAuth2Response.getEmail().endsWith("@g.yju.ac.kr")) {
-//            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_domain"), "유효하지 않은 이메일 도메인입니다.");
-//        }
-
         String googleId = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
         UserEntity existData = userRepository.findByGoogleId(googleId);
 
@@ -41,27 +34,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String name = oAuth2Response.getName();
 
-        String adminEmail = "wss3325@g.yju.ac.kr";
+        String adminEmail = "useop0821@gmail.com";
         if (email.equals(adminEmail)) {
-            role = "ROLE_ADMIN"; // 관리자 역할 부여
+            role = "ROLE_ADMIN";
         } else {
-            role = "ROLE_USER"; // 일반 사용자 역할 부여
+            role = "ROLE_USER";
         }
 
         if (existData == null) {
 
-            UserEntity userEntity = new UserEntity();
-            userEntity.setGoogleId(googleId);
-            userEntity.setEmail(email);
-            userEntity.setName(name);
-            userEntity.setRole(role);
-
+            UserEntity userEntity = UserEntity.builder()
+                    .googleId(googleId)
+                    .email(email)
+                    .name(name)
+                    .role(role)
+                    .build();
             userRepository.save(userEntity);
         }
         else {
-
-            existData.setGoogleId(googleId);
-            existData.setEmail(oAuth2Response.getEmail());
+            existData.updateGoogleIdAndEmail(googleId, oAuth2Response.getEmail());
 
             role = existData.getRole();
 
