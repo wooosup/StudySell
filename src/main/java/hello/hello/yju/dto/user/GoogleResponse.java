@@ -1,4 +1,4 @@
-package hello.hello.yju.dto;
+package hello.hello.yju.dto.user;
 
 import java.util.Map;
 
