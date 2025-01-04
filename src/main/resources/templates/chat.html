@@ -224,10 +224,11 @@
     <input type="hidden" id="chatRoomId" th:value="${chatRoomId}">
     <input type="hidden" id="senderId" th:value="${senderId}">
     <input type="hidden" id="senderName" th:value="${senderName}">
+    <input type="hidden" id="itemName" th:value="${itemName}">
 
     <div class="chat-container shadow">
         <div class="chat-header">
-            채팅방
+            <span th:text="${itemName}"></span>
         </div>
         <div id="chatBox" class="chat-messages">
             <!-- Messages will be added here -->
