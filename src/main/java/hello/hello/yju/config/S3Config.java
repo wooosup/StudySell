@@ -21,6 +21,7 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+
     @Bean
     public S3Client s3Client() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
