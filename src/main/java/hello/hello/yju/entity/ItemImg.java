@@ -1,13 +1,15 @@
 package hello.hello.yju.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "item_img")
 @Getter
-@Setter
 public class ItemImg extends BaseTimeEntity{
 
     @Id
@@ -26,6 +28,15 @@ public class ItemImg extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
+
+    @Builder
+    private ItemImg(String imgName, String oriImgName, String imgUrl, String repimgYn, ItemEntity item) {
+        this.imgName = imgName;
+        this.oriImgName = oriImgName;
+        this.imgUrl = imgUrl;
+        this.repimgYn = repimgYn;
+        this.item = item;
+    }
 
     public void updateItemImg(String oriImgName, String imgName, String imgUrl){
         this.oriImgName = oriImgName;
