@@ -1,4 +1,4 @@
-package hello.hello.yju.controller;
+package hello.hello.yju.controller.user;
 
 
 import hello.hello.yju.dto.user.CustomOAuth2User;

@@ -1,4 +1,4 @@
-package hello.hello.yju.controller;
+package hello.hello.yju.controller.item;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.FileSystemResource;

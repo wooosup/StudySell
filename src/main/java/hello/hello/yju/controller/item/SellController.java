@@ -1,7 +1,7 @@
-package hello.hello.yju.controller;
+package hello.hello.yju.controller.item;
 
-import hello.hello.yju.dto.CustomOAuth2User;
-import hello.hello.yju.dto.ItemFormDto;
+import hello.hello.yju.dto.user.CustomOAuth2User;
+import hello.hello.yju.dto.item.ItemFormDto;
 import hello.hello.yju.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class SellController {
 
     @PostMapping("/user/item/new")
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
-                          Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                          Model model, @RequestParam(value = "itemImgFile") List<MultipartFile> itemImgFileList,
                           @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 
         if (bindingResult.hasErrors()) {
@@ -55,7 +55,7 @@ public class SellController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "/user/item/{itemId}")
+    @GetMapping( "/user/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
         try {
             ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
@@ -68,9 +68,9 @@ public class SellController {
         return "upload_item";
     }
 
-    @PostMapping(value = "/user/item/{itemId}")
-    public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
-                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model) {
+    @PostMapping("/user/item/{itemId}")
+    public String itemUpdate(@PathVariable("itemId") Long itemId, @Valid ItemFormDto itemFormDto, BindingResult bindingResult,
+                             @RequestParam(value = "itemImgFile") List<MultipartFile> itemImgFileList, Model model) {
         if (bindingResult.hasErrors()) {
             return "upload_item";
         }
