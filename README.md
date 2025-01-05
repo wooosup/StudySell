@@ -8,46 +8,33 @@
     <img src="readmeImage/img.png" width="550">
 </div>
 
-#### 프로젝트 유형: 팀 프로젝트 (팀장)  
-#### 프로젝트 기간: 2024년 4월 - 2024년 6월  
-#### 사용 기술: Spring Boot, JPA, QueryDSL, EC2, RDS, S3, MariaDB, Git
-
+---
+#### 2025/01/05 리팩터링 시작
+## 프로젝트 정보
+- **유형**: 팀 프로젝트 (팀장)
+- **기간**: 2024년 4월 ~ 2024년 6월
+- **역할**: 팀장으로서 기획, 설계, 개발 및 배포 전반 관리
+- **기술 스택**:
+    - **백엔드**: Spring Boot, JPA, QueryDSL
+    - **프론트엔드**: Thymeleaf, Bootstrap
+    - **데이터베이스**: MariaDB (RDS)
+    - **클라우드 서비스**: AWS EC2, S3
+    - **버전 관리**: Git
 ---
 
 ## 프로젝트 개요
 - 대학생들이 학기마다 새로 구입해야 하는 교재 비용을 절감할 수 있도록 중고 거래를 통해 경제적 부담을 줄이는 것입니다. 
 - 책이 전문적이고, 대중적이지 않은 책이기 때문에 판매하는 사람들이 많이 없어 대학 내에서 직접 거래할 수 있는 플랫폼을 제공하여,
 학생들이 안전하고 편리하게 거래할 수 있도록 합니다.
+- 가장 큰 이유는 계속 쌓여만 가는 제 전공책을 팔고 싶었습니다.
+---
+## 화면
+<div align="center">
+    <img src="readmeImage/img_7.png" width="700">
+</div>
 
 ---
-## 기능
-### 기능 1: 소셜 로그인
+## 프로젝트 DB ERD
 <div align="center">
-    <img src="readmeImage/img_1.png" width="400">
+    <img src="readmeImage/img_8.png" width="700">
 </div>
-
-- 대학 이메일 인증으로 접근을 제한하여 같은 학교 학생들이 책을 빠르게 사고 팔 수 있도록 하였습니다. (예: @g.yju.ac.kr)
-
-### 기능 2: 상품 판매
-<div align="center">
-    <img src="readmeImage/img_2.png" width="400">
-</div>
-
-- 상태는 판매에서는 고정이며 수정할 때 변경 할 수 있습니다.
-- 학과 별로 필요한 책을 손쉽게 찾을 수 있도록 하여 효율성을 높였습니다.
-
-### 기능 3: 채팅 서비스
-<div align="center">
-    <img src="readmeImage/img_3.png" width="100">
-    <img src="readmeImage/img_4.png" width="400">
-</div>
-
-- 상품의 상세 페이지에서 채팅하기를 누르면 실시간으로 채팅을 할 수 있습니다.
-
-### 기능 4: 마이페이지
-<div align="center">
-    <img src="readmeImage/img_5.png">
-    <img src="readmeImage/img_6.png">
-</div>
-
-- 사용자의 이름이 표시되고 판매중인 상품 목록, 채팅 중인 채팅방을 입장할 수 있습니다.
