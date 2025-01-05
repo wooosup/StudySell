@@ -19,7 +19,7 @@
     - **프론트엔드**: Thymeleaf, Bootstrap
     - **데이터베이스**: MariaDB (RDS)
     - **클라우드 서비스**: AWS EC2, S3
-    - **버전 관리**: Git
+    - **버전 관리**: Git, GitHub
 ---
 
 ## 프로젝트 개요
