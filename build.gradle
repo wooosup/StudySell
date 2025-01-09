@@ -61,6 +61,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     // Websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    // H2
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
