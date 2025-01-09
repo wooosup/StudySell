@@ -5,6 +5,9 @@ import hello.hello.yju.dto.chat.ChatRoomRequest;
 import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.exception.BuyerNotFound;
+import hello.hello.yju.exception.ChatRoomNotFound;
+import hello.hello.yju.exception.ItemNotFound;
 import hello.hello.yju.repository.chat.ChatMessageRepository;
 import hello.hello.yju.repository.chat.ChatRoomRepository;
 import hello.hello.yju.repository.item.ItemRepository;
@@ -20,9 +23,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static hello.hello.yju.entity.ItemSellStatus.SELL;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +85,7 @@ class ChatServiceTest {
         request = ChatRoomRequest.builder()
                 .itemId(item.getId())
                 .buyerId(buyer.getGoogleId())
+                .sellerId(seller.getGoogleId())
                 .build();
     }
 
@@ -88,9 +93,9 @@ class ChatServiceTest {
     @Test
     void createChatRoom() throws Exception {
         //given
-        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(itemRepository.findById(item.getId())).thenReturn(of(item));
         when(userRepository.findByGoogleId(request.getBuyerId())).thenReturn(buyer);
-        when(chatRoomRepository.findBySellerAndBuyerAndItem(seller, buyer, item)).thenReturn(Optional.empty());
+        when(chatRoomRepository.findBySellerAndBuyerAndItem(seller, buyer, item)).thenReturn(empty());
 
         ChatRoom chatRoom = ChatRoom.builder()
                 .seller(seller)
@@ -121,7 +126,7 @@ class ChatServiceTest {
     @Test
     void existingChatRoom() throws Exception {
         //given
-        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(itemRepository.findById(item.getId())).thenReturn(of(item));
         when(userRepository.findByGoogleId(request.getBuyerId())).thenReturn(buyer);
         ChatRoom existingChatRoom = ChatRoom.builder()
                 .seller(seller)
@@ -129,7 +134,7 @@ class ChatServiceTest {
                 .item(item)
                 .build();
         when(chatRoomRepository.findBySellerAndBuyerAndItem(seller, buyer, item))
-                .thenReturn(Optional.of(existingChatRoom));
+                .thenReturn(of(existingChatRoom));
         ReflectionTestUtils.setField(existingChatRoom, "id", 1L);
 
         //when
@@ -149,11 +154,11 @@ class ChatServiceTest {
     @Test
     void itemNotFound() throws Exception {
         //given
-        when(itemRepository.findById(item.getId())).thenReturn(Optional.empty());
+        when(itemRepository.findById(item.getId())).thenReturn(empty());
 
         //expect
         assertThatThrownBy(() -> chatService.createChatRoom(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ItemNotFound.class)
                 .hasMessage("상품을 찾지 못했습니다.");
     }
 
@@ -161,12 +166,12 @@ class ChatServiceTest {
     @Test
     void buyerNotFound() throws Exception {
         //given
-        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(itemRepository.findById(item.getId())).thenReturn(of(item));
         when(userRepository.findByGoogleId(request.getBuyerId())).thenReturn(null);
 
         //expect
         assertThatThrownBy(() -> chatService.createChatRoom(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BuyerNotFound.class)
                 .hasMessage("구매자를 찾지 못했습니다.");
     }
 
@@ -175,11 +180,11 @@ class ChatServiceTest {
     void chatRoomNotFound() throws Exception {
         //given
         Long chatRoomId = 1L;
-        when(chatRoomRepository.findById(chatRoomId)).thenReturn(Optional.empty());
+        when(chatRoomRepository.findById(chatRoomId)).thenReturn(empty());
 
         //expect
         assertThatThrownBy(() -> chatService.getChatRoom(chatRoomId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ChatRoomNotFound.class)
                 .hasMessage("채팅방을 찾지 못했습니다.");
     }
 
@@ -239,13 +244,13 @@ class ChatServiceTest {
         ReflectionTestUtils.setField(chatRoom2, "id", 2L);
 
         List<ChatRoom> chatRooms = Arrays.asList(chatRoom1, chatRoom2);
-        when(chatRoomRepository.findByItem_Id(itemId)).thenReturn(chatRooms);
+        when(chatRoomRepository.findByItemId(itemId)).thenReturn(chatRooms);
 
         //when
         chatService.deleteChatRoom(itemId);
 
         //then
-        verify(chatRoomRepository, times(1)).findByItem_Id(itemId);
+        verify(chatRoomRepository, times(1)).findByItemId(itemId);
         verify(chatMessageRepository, times(2)).deleteByChatRoom(any(ChatRoom.class));
         verify(chatRoomRepository, times(2)).delete(any(ChatRoom.class));
     }
