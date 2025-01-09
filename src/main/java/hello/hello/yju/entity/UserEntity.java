@@ -11,7 +11,7 @@ import static jakarta.persistence.CascadeType.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity{
 
     @Id
