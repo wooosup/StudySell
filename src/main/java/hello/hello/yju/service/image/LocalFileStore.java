@@ -25,7 +25,7 @@ public class LocalFileStore implements FileStore {
         try {
             Files.createDirectories(this.storageLocation);
         } catch (IOException e) {
-            throw new FileStorageException("로컬 저장소 디렉토리를 생성할 수 없습니다.", e);
+            throw new FileStorageException("로컬 저장소를 생성할 수 없습니다.", e);
         }
     }
 
