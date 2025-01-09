@@ -10,7 +10,6 @@ import java.io.*;
 @RequiredArgsConstructor
 public class FileService {
 
-//    private final S3Service s3Service;
     private final FileStore fileStore;
 
     public String uploadFile(String originalFileName, byte[] fileData) throws IOException {
