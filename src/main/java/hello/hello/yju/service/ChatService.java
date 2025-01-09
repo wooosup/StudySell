@@ -5,6 +5,9 @@ import hello.hello.yju.dto.chat.ChatRoomRequest;
 import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.exception.BuyerNotFound;
+import hello.hello.yju.exception.ChatRoomNotFound;
+import hello.hello.yju.exception.ItemNotFound;
 import hello.hello.yju.repository.chat.ChatMessageRepository;
 import hello.hello.yju.repository.chat.ChatRoomRepository;
 import hello.hello.yju.repository.item.ItemRepository;
@@ -28,7 +31,7 @@ public class ChatService {
     @Transactional
     public ChatRoomDto createChatRoom(ChatRoomRequest request) {
         ItemEntity item = itemRepository.findById(request.getItemId())
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾지 못했습니다."));
+                .orElseThrow(ItemNotFound::new);
         UserEntity seller = item.getUser();
         UserEntity buyer = findBuyer(request);
 
@@ -44,22 +47,22 @@ public class ChatService {
                 .toList();
     }
 
-    public ChatRoomDto getChatRoom(Long chatRoomId) {
-        return chatRoomRepository.findById(chatRoomId)
+    public void getChatRoom(Long chatRoomId) {
+        chatRoomRepository.findById(chatRoomId)
                 .map(ChatRoomDto::of)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
+                .orElseThrow(ChatRoomNotFound::new);
     }
 
     @Transactional
     public void deleteChatRoom(Long itemId) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findByItem_Id(itemId);
+        List<ChatRoom> chatRooms = chatRoomRepository.findByItemId(itemId);
         deleteChatRooms(chatRooms);
     }
 
     private UserEntity findBuyer(ChatRoomRequest request) {
         UserEntity buyer = userRepository.findByGoogleId(request.getBuyerId());
         if (buyer == null) {
-            throw new IllegalArgumentException("구매자를 찾지 못했습니다.");
+            throw new BuyerNotFound();
         }
         return buyer;
     }

@@ -5,6 +5,8 @@ import hello.hello.yju.dto.chat.ChatMessageRequest;
 import hello.hello.yju.entity.ChatMessage;
 import hello.hello.yju.entity.ChatRoom;
 import hello.hello.yju.entity.UserEntity;
+import hello.hello.yju.exception.ChatRoomNotFound;
+import hello.hello.yju.exception.SenderNotFound;
 import hello.hello.yju.repository.chat.ChatMessageRepository;
 import hello.hello.yju.repository.chat.ChatRoomRepository;
 import hello.hello.yju.repository.user.UserRepository;
@@ -28,7 +30,7 @@ public class ChatMessageService {
     public ChatMessageDto saveMessage(ChatMessageRequest request) {
         // 채팅방 검증 및 조회
         ChatRoom chatRoom = chatRoomRepository.findById(request.getChatRoomId())
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
+                .orElseThrow(ChatRoomNotFound::new);
 
         // 발신자 검증 및 조회
         UserEntity sender = findSender(request);
@@ -43,7 +45,7 @@ public class ChatMessageService {
 
     public List<ChatMessageDto> getChatMessages(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾지 못했습니다."));
+                .orElseThrow(ChatRoomNotFound::new);
         return chatMessageRepository.findByChatRoom(chatRoom).stream()
                 .map(ChatMessageDto::of)
                 .toList();
@@ -58,7 +60,7 @@ public class ChatMessageService {
     private UserEntity findSender(ChatMessageRequest request) {
         UserEntity sender = userRepository.findByGoogleId(request.getSenderId());
         if (sender == null) {
-            throw new IllegalArgumentException("발신자를 찾지 못했습니다.");
+            throw new SenderNotFound();
         }
         return sender;
     }
