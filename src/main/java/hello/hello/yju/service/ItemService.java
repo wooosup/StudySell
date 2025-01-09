@@ -35,18 +35,16 @@ public class ItemService {
     private final ChatService chatService;
 
     @Transactional
-    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList, String googleId) throws Exception {
+    public void saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList, String googleId) throws Exception {
         UserEntity userEntity = getCurrentUserEntityByGoogleId(googleId);
 
         ItemEntity itemEntity = itemFormDto.toEntity();
-        itemEntity.setRegTime(LocalDateTime.now());
+        itemEntity.setCreateDateTime(LocalDateTime.now());
         itemEntity.assignUser(userEntity);
 
         itemRepository.save(itemEntity);
 
         saveItemImg(itemImgFileList, itemEntity);
-
-        return itemEntity.getId();
     }
 
     public ItemFormDto getItemDtl(Long itemId) {
@@ -64,15 +62,13 @@ public class ItemService {
     }
 
     @Transactional
-    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+    public void updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
         ItemEntity itemEntity = itemRepository.findById(itemFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
 
         itemEntity.updateItem(itemFormDto);
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
         updateImg(itemImgFileList, itemImgIds);
-
-        return itemEntity.getId();
     }
 
     @Transactional
