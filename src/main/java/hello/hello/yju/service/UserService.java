@@ -21,7 +21,7 @@ public class UserService {
     public List<ItemEntity> findItemsById(String googleId) {
         UserEntity user = userRepository.findByGoogleId(googleId);
         if (user != null) {
-            return itemRepository.findByUser_GoogleId(user.getGoogleId());
+            return itemRepository.findByUserGoogleId(user.getGoogleId());
         } else {
             return Collections.emptyList();
         }
