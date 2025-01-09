@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.user;
 
 import hello.hello.yju.entity.ItemEntity;
 import hello.hello.yju.entity.UserEntity;
