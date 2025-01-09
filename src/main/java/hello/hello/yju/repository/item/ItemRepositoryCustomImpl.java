@@ -56,7 +56,7 @@ public class ItemRepositoryCustomImpl implements  ItemRepositoryCustom{
                                 itemEntity.description,
                                 itemImg.imgUrl,
                                 itemEntity.price,
-                                itemEntity.regTime
+                                itemEntity.createDateTime
                                 )
                 )
                 .from(itemImg)
