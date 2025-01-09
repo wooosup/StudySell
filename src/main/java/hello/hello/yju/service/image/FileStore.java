@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.image;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,7 +8,7 @@ public interface FileStore {
 
     String uploadFile(MultipartFile file) throws IOException;
 
-    void deleteFile(String filePath) throws IOException;
+    void deleteFile(String fileName) throws IOException;
 
     String generateFileUrl(String fileName);
 }
