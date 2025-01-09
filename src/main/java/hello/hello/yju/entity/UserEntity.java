@@ -28,10 +28,10 @@ public class UserEntity{
     private final List<ItemEntity> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = ALL, orphanRemoval = true)
-    private List<ChatRoom> seller;
+    private List<ChatRoom> seller = new ArrayList<>();
 
     @OneToMany(mappedBy = "buyer", cascade = ALL, orphanRemoval = true)
-    private List<ChatRoom> buyer;
+    private List<ChatRoom> buyer = new ArrayList<>();
 
     @Builder
     private UserEntity(String googleId, String email, String name, String role) {
