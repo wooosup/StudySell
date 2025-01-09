@@ -40,7 +40,7 @@ class ChatRoomRepositoryTest {
         em.clear();
 
         //when
-        List<ChatRoom> chatRooms = chatRoomRepository.findByItem_Id(item1.getId());
+        List<ChatRoom> chatRooms = chatRoomRepository.findByItemId(item1.getId());
 
         //then
         assertThat(chatRooms).hasSize(2)
