@@ -1,6 +1,6 @@
 package hello.hello.yju.config;
 
-import hello.hello.yju.service.CustomOAuth2UserService;
+import hello.hello.yju.service.user.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

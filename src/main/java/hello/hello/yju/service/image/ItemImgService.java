@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.image;
 
 import hello.hello.yju.entity.ItemImg;
 import hello.hello.yju.repository.item.ItemImgRepository;

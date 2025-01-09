@@ -2,7 +2,7 @@ package hello.hello.yju.controller;
 
 import hello.hello.yju.dto.item.ItemSearchDto;
 import hello.hello.yju.dto.item.MainItemDto;
-import hello.hello.yju.service.ItemService;
+import hello.hello.yju.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

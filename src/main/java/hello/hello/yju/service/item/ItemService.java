@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.item;
 
 import hello.hello.yju.dto.item.ItemFormDto;
 import hello.hello.yju.dto.item.ItemImgDto;
@@ -10,6 +10,8 @@ import hello.hello.yju.entity.UserEntity;
 import hello.hello.yju.repository.item.ItemImgRepository;
 import hello.hello.yju.repository.item.ItemRepository;
 import hello.hello.yju.repository.user.UserRepository;
+import hello.hello.yju.service.chat.ChatService;
+import hello.hello.yju.service.image.ItemImgService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

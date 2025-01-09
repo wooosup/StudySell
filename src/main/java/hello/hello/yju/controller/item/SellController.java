@@ -2,7 +2,7 @@ package hello.hello.yju.controller.item;
 
 import hello.hello.yju.dto.user.CustomOAuth2User;
 import hello.hello.yju.dto.item.ItemFormDto;
-import hello.hello.yju.service.ItemService;
+import hello.hello.yju.service.item.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

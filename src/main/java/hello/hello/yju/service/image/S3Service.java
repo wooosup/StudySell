@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.image;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

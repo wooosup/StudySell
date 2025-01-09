@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.user;
 
 import hello.hello.yju.dto.user.CustomOAuth2User;
 import hello.hello.yju.dto.user.GoogleResponse;

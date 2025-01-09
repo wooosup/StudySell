@@ -1,4 +1,4 @@
-package hello.hello.yju.service;
+package hello.hello.yju.service.chat;
 
 import hello.hello.yju.dto.chat.ChatMessageDto;
 import hello.hello.yju.dto.chat.ChatMessageRequest;

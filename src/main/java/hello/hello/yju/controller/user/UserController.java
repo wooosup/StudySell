@@ -3,7 +3,7 @@ package hello.hello.yju.controller.user;
 
 import hello.hello.yju.dto.user.CustomOAuth2User;
 import hello.hello.yju.entity.ItemEntity;
-import hello.hello.yju.service.UserService;
+import hello.hello.yju.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
