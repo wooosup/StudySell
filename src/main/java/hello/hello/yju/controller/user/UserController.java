@@ -25,8 +25,7 @@ public class UserController {
 
     @GetMapping("/myInfo/items")
     public String getMyItems(Authentication authentication, Model model) {
-        if (authentication.getPrincipal() instanceof CustomOAuth2User) {
-            CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof CustomOAuth2User customOAuth2User) {
             String googleId = customOAuth2User.getGoogleId();
             List<ItemEntity> items = userService.findItemsById(googleId);
 
